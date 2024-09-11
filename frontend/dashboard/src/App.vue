@@ -30,6 +30,7 @@ async function getData() {
       state.datax = [];
       state.dataCardProductQuantity = 0;
       state.dataCardDTQuantity = 0;
+      state.listData = [];
 
       const response = await axios.get('http://localhost:8000/dashboard');
       // state.data = response.data;
@@ -59,6 +60,10 @@ async function getData() {
         state.datay.push(i['cnt'])
       }      
 
+      // 
+      state.listData = state.data['products_on_storage']
+
+      console.log('listdata =', state.listData)
 
 
     } catch (error) {
@@ -76,6 +81,13 @@ async function updateData() {
 onMounted(async () => {
     await getData()
 });
+
+
+const listTableColumns = {
+    'gtdnum':'Номер ДТ','name':'Владелец','date_in':'Дата прием','g32':'№ тов.',
+    'g31':'Наименование товара','g33_in':'Код ТНВЭД','g31_3':'Кол.доп.ед', 
+    'g31_3a':'Ед.изм.', 'g35':'Вес брутто', 'date_chk':'Дата ок.хр.'
+}
 
 </script>
 
@@ -96,10 +108,14 @@ onMounted(async () => {
     </div>
   </nav>
 
+  <div v-if="state.listData">
   <Dashboard :datax="state.datax" :datay="state.datay" 
     :dataCardProductQuantity="state.dataCardProductQuantity" 
     :dataCardDTQuantity="state.dataCardDTQuantity" 
+    :listName="'Товары на складе'" :listData="state.listData" 
+    :listTableColumns="listTableColumns"
   /> 
+  </div>
 
 </template>
 

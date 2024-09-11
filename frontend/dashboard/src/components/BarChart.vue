@@ -12,6 +12,8 @@ const props = defineProps({
     datay: Array,
 });
 
+console.log('check barchart data =', props.datax)
+
 // const name = props.name;
 const apexcharts = VueApexCharts;
 

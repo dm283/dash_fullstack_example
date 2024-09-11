@@ -73,6 +73,15 @@ select['tnved_quantity'] = f"""
                 order by cnt
         """
 
+select['products_on_storage'] = f"""
+  SELECT id,gtdnum,name, cast(date_in as date) date_in, g32,g31,g33_in,g31_2,
+  CASE WHEN g41a <>'166' THEN g31_3 ELSE 0 END g31_3,
+  CASE WHEN g41a <>'166' THEN g31_3a ELSE '' END g31_3a,
+  g35,g41a, cast(date_chk as date) date_chk, country 
+  FROM {DB_NAME}.{DB_SCHEMA}.TOVAR_SKLAD 
+  ORDER BY date_in ASC,gtdnum,g32
+"""
+
 
 def select_widget_data(select_name):
     #

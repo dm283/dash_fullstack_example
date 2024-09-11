@@ -10,9 +10,12 @@ const props = defineProps({
   datay: Array,
   dataCardProductQuantity: 0,
   dataCardDTQuantity: 0,
+  listName: String,
+  listData: Array,
+  listTableColumns: Object,
 });
 
-const openTab = ref(1);
+const openTab = ref(3);
 
 const toggleTabs = (tabNumber) => {
   openTab.value = tabNumber;
@@ -33,10 +36,14 @@ const toggleTabs = (tabNumber) => {
       <Tab1 :datax="datax" :datay="datay" 
         :dataCardProductQuantity="dataCardProductQuantity" 
         :dataCardDTQuantity="dataCardDTQuantity"
+        test="test"
       />
     </div>
     <div v-if="openTab == 2">
       <Tab2 :datax="datax" :datay="datay" />
+    </div>
+    <div v-if="openTab == 3">
+      <Tab3 :listName="listName" :listData="listData" :listTableColumns="listTableColumns" />
     </div>
   </div>
   

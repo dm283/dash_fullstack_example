@@ -1,20 +1,21 @@
 <script setup>
 import { defineProps, computed, reactive } from 'vue';
-import BarHorizont from '@/components/BarHorizont.vue';
+import List from '@/components/List.vue';
 
   
 const props = defineProps({
-  datax: Array,
-  datay: Array,
+  listName: String,
+  listData: Array,
+  listTableColumns: Object,
 });
 
 </script>
 
 <template>
   
-  <div class="border bg-white text-center">
+  <div class="border bg-white">
 
-    TAB-3
+    <List :name="listName" :data="listData" :listTableColumns="listTableColumns" />
 
   </div>
   

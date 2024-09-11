@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed, reactive } from 'vue';
+import { ref, defineProps, computed, reactive, onMounted } from 'vue';
 import BarChart from '@/components/BarChart.vue';
 import Card from '@/components/Card.vue';
 
@@ -14,7 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-  
+
   <div class="border bg-white text-center">
 
     <Card :label="'Количество товара на складе'" :value="dataCardProductQuantity" />
