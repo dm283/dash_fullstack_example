@@ -25,6 +25,9 @@ const state = reactive({
   // data: [],
   tableFields: [],
   localData: [],
+  dataForRender: [],
+  currentPage: 1,
+  limitRecords: 10,
 })
 
 // state.tableFields = Object.keys(props.data[0]); //
@@ -84,7 +87,8 @@ const loadLocalData = () => {
   };
 };
 
-loadLocalData();
+
+
 
 // const sortNumbers = (direction, field) => {
 //   // sort numbers
@@ -222,22 +226,55 @@ const checkState = () => {
 };
 
 
-const dataRender = () => {
+const computeRenderData = (action) => {
   //
+  if (action == 'right') {
+    if (state.currentPage < (Math.floor(props.data.length / state.limitRecords) + 1)) {
+      state.currentPage++;
+    }
+  }
+  else if (action == 'left') {
+    if (state.currentPage > 1) {
+      state.currentPage--;
+    }
+  }
+  else if (action == 'first') {
+    state.currentPage = 1;
+  }
+  else if (action == 'last') {
+    state.currentPage = Math.floor(props.data.length / state.limitRecords) + 1;
+  }
+  
+}
+
+const dataRender = () => {
+  // state.currentPage  state.limitRecords
   if (state.localData.length > 0) {
-    console.log('return localdata')
-    return state.localData.slice(0, 10)
+    return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
   } 
   else {
-    return props.data.slice(0, 10)
+    return props.data.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage)
+  }
+};
+
+const dataLengthRender= () => {
+  //
+  if (state.localData.length > 0) {
+    return state.localData.length
+  } 
+  else {
+    return props.data.length
   }
 }
+
+
 
 </script>
 
 
 
 <template>
+
 <div v-if="props.data[0]"> <!-- necessary div for waiting data from root component!!! -->
 
 <div @click="checkState()" class="max-w-max m-5 px-5 py-2 border border-gray-200 rounded-lg backdrop-filter backdrop-grayscale drop-shadow-lg">
@@ -252,7 +289,7 @@ const dataRender = () => {
 </section>
 
 <!-- search area ************************* --> 
-<div class="inline-block">
+<!-- <div class="inline-block">
 <div id="searchArea" class="flex mr-5 w-96 border border-gray-100 rounded-full shadow-md hover:shadow-lg">
 
   <div class="flex-0 bg-gray-100 h-8 rounded-l-full" 
@@ -275,7 +312,7 @@ const dataRender = () => {
     placeholder="Search" title="Type in a name">
 
 </div>
-</div>
+</div> -->
 
 <!-- sort area ************************* --> 
 <!-- <div class="inline-block">
@@ -336,10 +373,10 @@ const dataRender = () => {
 
 
 <!-- table area ************************* --> 
-<section class="mt-2 border rounded-lg overflow-x-auto ">
+<section class="mt-2 border rounded-lg overflow-x-auto">
 <table class="">
   <thead>
-    <tr class="h-10 bg-blue-400 text-sm text-white font-semibold text-center">
+    <tr class="h-8 bg-blue-400 text-sm text-white font-semibold text-center">
       <td class="" v-for="(field, index) in Object.keys(props.listTableColumns)">
         <div class="px-2 py-2 min-w-max">{{ props.listTableColumns[field] }}</div>
       </td>
@@ -367,12 +404,36 @@ const dataRender = () => {
 </table>
 </section>
 
+<!-- ***************   PAGINATION BLOCK   ********************* -->
+<div id="paginationBlock" class="overflow-auto pt-3 pb-2">
+<div class="float-right space-x-1.5">
+  <div class="paginationBtn" @click="computeRenderData('first')">
+    <i class="pi pi-angle-double-left" style="font-size: 1rem"></i>
+  </div>
+  <div class="paginationBtn" @click="computeRenderData('left')">
+    <i class="pi pi-angle-left" style="font-size: 1rem"></i>
+  </div>
+  {{ state.limitRecords*(state.currentPage-1)+1 }}-
+  {{ (state.limitRecords*state.currentPage < dataLengthRender()) ? state.limitRecords*state.currentPage : dataLengthRender() }} of {{ dataLengthRender() }}
+  <div class="paginationBtn" @click="computeRenderData('right')">
+    <i class="pi pi-angle-right" style="font-size: 1rem"></i>
+  </div>
+  <div class="paginationBtn" @click="computeRenderData('last')">
+    <i class="pi pi-angle-double-right" style="font-size: 1rem"></i>
+  </div>
+</div>
+</div>
+
 </div>
 </div>
 </template>
 
 
-<style scope>
+<style lang="postcss" scope>
+.paginationBtn {
+  @apply bg-gray-50 inline-block cursor-pointer w-8 h-8 border rounded-lg text-center py-1
+}
+
 #btn-1:hover, #btn-2:hover, #btn-3:hover,
 #btn-4:hover, #btn-5:hover, #btn-6:hover {
   background-color: #E4E4E7;

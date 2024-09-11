@@ -93,14 +93,14 @@ const listTableColumns = {
 
 <template>
 
-  <nav class="bg-gradient-to-r from-green-400 to-blue-500 px-10 py-3 text-white h-14">
+  <nav class="bg-gradient-to-r from-green-400 to-blue-500 px-10 py-3 text-white overflow-auto">
     <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
       <div class="px-4 border-r-2">Dashboard</div>
       <div class="px-4">Витрина таможенного склада</div>
     </div>
     <div class="flex float-right">
-      <div class="px-4 pt-1 text-base">09-09-2024 17:30</div>
+      <div class="px-4 text-base">09-09-2024 17:30</div>
       <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
       <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
       <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem"></i></div>
@@ -122,6 +122,6 @@ const listTableColumns = {
 
 <style lang="postcss" scoped>
 .header-btn {
-  @apply mx-3 my-1.5 cursor-pointer hover:text-green-400
+  @apply mx-3 mt-1 cursor-pointer hover:text-green-400
 }
 </style>
