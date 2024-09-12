@@ -27,7 +27,7 @@ const state = reactive({
   localData: [],
   dataForRender: [],
   currentPage: 1,
-  limitRecords: 10,
+  limitRecords: 13,
 })
 
 // state.tableFields = Object.keys(props.data[0]); //
@@ -277,7 +277,8 @@ const dataLengthRender= () => {
 
 <div v-if="props.data[0]"> <!-- necessary div for waiting data from root component!!! -->
 
-<div @click="checkState()" class="max-w-max m-5 px-5 py-2 border border-gray-200 rounded-lg backdrop-filter backdrop-grayscale drop-shadow-lg">
+<div @click="checkState()" class="max-w-max m-0 px-3 py-2 border border-gray-200 rounded-lg
+  bg-white drop-shadow-md hover:drop-shadow-lg ">
 
 <!-- {{ props.listTableColumns }} -->
 
@@ -285,7 +286,7 @@ const dataLengthRender= () => {
 <nav class="text-sm font-semibold space-y-0 border-dashed border-green-500">
 
 <section class="inline-block mr-5">
-  <div class="text-xl font-semibold">{{ props.name }}</div>
+  <div class="text-xl font-normal">{{ props.name }}</div>
 </section>
 
 <!-- search area ************************* --> 
@@ -376,7 +377,7 @@ const dataLengthRender= () => {
 <section class="mt-2 border rounded-lg overflow-x-auto">
 <table class="">
   <thead>
-    <tr class="h-8 bg-blue-400 text-sm text-white font-semibold text-center">
+    <tr class="h-8 bg-blue-400 text-sm font-semibold text-white  text-center">
       <td class="" v-for="(field, index) in Object.keys(props.listTableColumns)">
         <div class="px-2 py-2 min-w-max">{{ props.listTableColumns[field] }}</div>
       </td>
@@ -413,8 +414,9 @@ const dataLengthRender= () => {
   <div class="paginationBtn" @click="computeRenderData('left')">
     <i class="pi pi-angle-left" style="font-size: 1rem"></i>
   </div>
-  {{ state.limitRecords*(state.currentPage-1)+1 }}-
-  {{ (state.limitRecords*state.currentPage < dataLengthRender()) ? state.limitRecords*state.currentPage : dataLengthRender() }} of {{ dataLengthRender() }}
+  {{ state.limitRecords*(state.currentPage-1)+1 }}-{{ 
+    (state.limitRecords*state.currentPage < dataLengthRender()) 
+    ? state.limitRecords*state.currentPage : dataLengthRender() }} of {{ dataLengthRender() }}
   <div class="paginationBtn" @click="computeRenderData('right')">
     <i class="pi pi-angle-right" style="font-size: 1rem"></i>
   </div>
@@ -432,6 +434,10 @@ const dataLengthRender= () => {
 <style lang="postcss" scope>
 .paginationBtn {
   @apply bg-gray-50 inline-block cursor-pointer w-8 h-8 border rounded-lg text-center py-1
+}
+
+.paginationBtn:hover {
+  @apply bg-gray-100
 }
 
 #btn-1:hover, #btn-2:hover, #btn-3:hover,

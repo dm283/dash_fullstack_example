@@ -15,6 +15,8 @@ const props = defineProps({
 // const name = props.name;
 const apexcharts = VueApexCharts;
 
+const figureFontFamily = 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
+
 const options = {
   chart: {
     id: 'basic-bar-horizont',
@@ -26,17 +28,17 @@ const options = {
   },
   title: {
     text: props.title,
-    style: {fontSize: '20px', fontWeight: 'bold', color: 'DarkSlategray', }
+    style: {fontFamily: figureFontFamily, fontSize: '20px', fontWeight: 'normal', color: 'black', }
   },
   colors: [props.barcolor],
   xaxis: {
     title: { text: props.xtitle, 
-      style: {fontSize: '14px', fontWeight: 'bold', color: 'DarkSlategray', }},
+      style: {fontFamily: figureFontFamily, fontSize: '16px', fontWeight: 'normal', color: 'black', }},
     categories: props.datax,
   },
   yaxis: {
     title: { text: props.ytitle, 
-      style: {fontSize: '14px', fontWeight: 'bold', color: 'DarkSlategray', }},
+      style: {fontFamily: figureFontFamily, fontSize: '16px', fontWeight: 'normal', color: 'black', }},
   },
   dataLabels: {
     style: {
@@ -50,7 +52,7 @@ const options = {
 const computedSeries = computed(() => {
   //
   let series = [{
-    name: 'количество',
+    name: 'Количество',
     data: props.datay,
   }];
   return series;
@@ -60,13 +62,8 @@ const computedSeries = computed(() => {
 
 
 <template>
-  <div class="inline-block drop-shadow-md border border-gray-200 bg-white
-    rounded-md m-5 p-3 hover:drop-shadow-lg">
-    <apexcharts width="400" height="280" type="bar" :options="options" :series="computedSeries"
-    ></apexcharts>  
+  <div class="p-3 border border-gray-200 rounded-lg bg-white drop-shadow-md hover:drop-shadow-lg">
+    <apexcharts width="473" height="280" type="bar" :options="options" :series="computedSeries">
+    </apexcharts>  
   </div>
 </template>
-
-
-<!-- width="500" height="350" -->
- <!-- 400 - 280 -->

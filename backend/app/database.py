@@ -70,7 +70,7 @@ select['tnved_quantity'] = f"""
                 FROM {DB_NAME}.{DB_SCHEMA}.tovar_sklad  WHERE 1=1
                 GROUP BY LEFT(g33_in,4)) AS a
                 ORDER BY 2 DESC) b
-                order by cnt
+                order by cnt desc
         """
 
 select['products_on_storage'] = f"""

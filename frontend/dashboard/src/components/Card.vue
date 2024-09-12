@@ -11,12 +11,15 @@ const props = defineProps({
 
 
 <template>
-    <div class="w-64 h-30 drop-shadow-md border border-gray-200 bg-white rounded-md m-5 p-3 hover:drop-shadow-lg">
+    <div class="m-0 p-2 w-58 h-40 border border-gray-200 rounded-lg drop-shadow-md  
+      bg-white text-center hover:drop-shadow-lg flex items-center justify-center">
       <div class="">
-        {{ label }}
-      </div>
-      <div class="text-blue-500 pt-3 text-4xl font-normal">
-        {{ value }}
+        <div class="font-normal">
+          {{ label }}
+        </div>
+        <div class="text-blue-500 pt-3 text-4xl font-normal">
+          {{ value }}
+        </div>
       </div>
     </div>
 </template>

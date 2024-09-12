@@ -13,10 +13,6 @@ const props = defineProps({
 
 <template>
   
-  <div class="border bg-white">
-
-    <List :name="listName" :data="listData" :listTableColumns="listTableColumns" />
-
-  </div>
+  Отчет ТС
   
 </template>

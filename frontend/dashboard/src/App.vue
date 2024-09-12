@@ -108,7 +108,7 @@ const listTableColumns = {
     </div>
   </nav>
 
-  <div v-if="state.listData">
+  <div v-if="state.listData" class="bg-gray-50 h-screen">
   <Dashboard :datax="state.datax" :datay="state.datay" 
     :dataCardProductQuantity="state.dataCardProductQuantity" 
     :dataCardDTQuantity="state.dataCardDTQuantity" 
