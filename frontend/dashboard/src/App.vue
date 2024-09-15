@@ -108,7 +108,7 @@ const reportVehicleListTableColumns = {
 
 <template>
 
-  <nav class="bg-gradient-to-r from-green-400 to-blue-500 px-10 py-3 text-white overflow-auto">
+  <nav class="bg-gradient-to-r from-gray-400 to-gray-600 px-10 py-3 text-white overflow-auto">
     <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
       <div class="px-4 border-r-2">Dashboard</div>

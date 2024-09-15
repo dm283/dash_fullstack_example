@@ -17,9 +17,9 @@ const props = defineProps({
       bg-white hover:drop-shadow-lg text-center flex items-center justify-center">
       <!-- text-center  flex items-center justify-center -->
       <div class="">
-        <div class="text-blue-400">
+        <!-- <div class="text-blue-400">
           <i class="pi pi-briefcase" style="font-size: 1.3rem; "></i>
-        </div>
+        </div> -->
         <div class="text-sm font-semibold">{{ label }}</div>
 
         <div class="text-blue-500 pt-3 text-4xl font-normal">
