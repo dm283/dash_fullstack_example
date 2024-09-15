@@ -76,6 +76,11 @@ async function updateData() {
   await getData();
 };
 
+const handleSubmit = async () => {
+  //
+  console.log('handle submit!')
+}
+
 
 onMounted(async () => {
     await getData()
@@ -104,10 +109,34 @@ const reportVehicleListTableColumns = {
     'g35ost_':'Остаток брутто', 'g31_3ost_':'Остаток Доп.ед',
 }
 
+
+const filterAccountBookDateDocFrom = ref();
+const filterAccountBookDateDocTo = ref();
+
+const filterAccountBookDateEnterFrom = ref()
+const filterAccountBookDateEnterTo = ref()
+
+const filterReportVehicleDateEnterFrom = ref()
+const filterReportVehicleDateExitTo = ref()
+
+const showFiltersBar = ref(false);
+const mouseOverFiltersBar = ref(false);
+
+const clearFilters = () => {
+  filterAccountBookDateDocFrom.value = '';
+  filterAccountBookDateDocTo.value = '';
+
+  filterAccountBookDateEnterFrom.value = ''
+  filterAccountBookDateEnterTo.value = ''
+
+  filterReportVehicleDateEnterFrom.value = ''
+  filterReportVehicleDateExitTo.value = ''
+}
+
 </script>
 
 <template>
-
+<div>
   <nav class="bg-gradient-to-r from-gray-400 to-gray-600 px-10 py-3 text-white overflow-auto">
     <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
@@ -119,9 +148,122 @@ const reportVehicleListTableColumns = {
       <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
       <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
       <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem"></i></div>
-      <div class="header-btn"><i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
+      <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
+        <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
     </div>
   </nav>
+
+  <div v-if="showFiltersBar" class="absolute z-10 right-0 border w-96 h-screen bg-white">
+    <div class="p-3 bg-gray-200 overflow-auto">
+    <div class="float-left text-xl ">
+      Фильтры данных
+    </div>
+    <div class="float-right cursor-pointer hover:text-gray-500" @click="showFiltersBar=false">
+      <i class="pi pi-times" style="font-size: 1.5rem"></i>
+    </div>
+    </div>
+
+    <form @submit.prevent="handleSubmit" class="mx-0 mt-3 ">
+
+      <div class="mt-5 mb-2 ml-3">КНИГА УЧЁТА</div>
+
+      <div class="mx-5 mb-2">
+        <label class="formLabelStyle">date_doc</label>
+        <div class="flex border">
+          <div>c</div>
+          <input
+            type="date"
+            v-model="filterAccountBookDateDocFrom"
+            id="filterAccountBookDateDocFrom"
+            name="filterAccountBookDateDocFrom"
+            class="formInputStyle"
+            placeholder=""
+          />
+          <div>по</div>
+          <input
+            type="date"
+            v-model="filterAccountBookDateDocTo"
+            id="filterAccountBookDateDocTo"
+            name="filterAccountBookDateDocTo"
+            class="formInputStyle"
+            placeholder=""
+          />   
+        </div>
+      </div>
+
+      <div class="mx-5 mb-2">
+        <label class="formLabelStyle">Дата приёма</label>
+        <div class="flex border">
+          <div>c</div>
+          <input
+            type="date"
+            v-model="filterAccountBookDateEnterFrom"
+            id="filterAccountBookDateEnterFrom"
+            name="filterAccountBookDateEnterFrom"
+            class="formInputStyle"
+            placeholder=""
+          />
+          <div>по</div>
+          <input
+            type="date"
+            v-model="filterAccountBookDateEnterTo"
+            id="filterAccountBookDateEnterTo"
+            name="filterAccountBookDateEnterTo"
+            class="formInputStyle"
+            placeholder=""
+          />   
+        </div>
+      </div>
+
+      <hr class="mt-7"> 
+
+      <div class="mt-5 mb-2 ml-3">ОТЧЁТ ТС</div>
+
+      <div class="mx-5 mb-2">
+        <label class="formLabelStyle">Дата выдачи - Дата приёма</label>
+        <div class="flex border">
+          <div>c</div>
+          <input
+            type="date"
+            v-model="filterReportVehicleDateEnterFrom"
+            id="filterDateDocFrom"
+            name="filterDateDocFrom"
+            class="formInputStyle"
+            placeholder=""
+          />
+          <div>по</div>
+          <input
+            type="date"
+            v-model="filterReportVehicleDateExitTo"
+            id="filterDateDocTo"
+            name="filterDateDocTo"
+            class="formInputStyle"
+            placeholder=""
+          />   
+        </div>
+      </div>
+
+
+      <div class="mt-10 flex justify-center space-x-5 py-3 px-5 text-center">
+        <button
+          class="bg-teal-400 text-white font-semibold rounded-full px-3 py-2 w-60
+            drop-shadow-md hover:shadow-lg hover:opacity-75"
+          type="submit"
+        >
+        Применить
+        </button>
+        <button
+          class="bg-pink-400 text-white font-semibold rounded-full px-3 py-2 w-60
+            drop-shadow-md hover:shadow-lg hover:opacity-75"
+          type="button"
+          @click="clearFilters()"
+        >
+        Сбросить
+        </button>
+      </div>
+    </form>
+
+  </div>
 
   <!-- Show loading spinner while loading is true -->
   <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
@@ -131,6 +273,13 @@ const reportVehicleListTableColumns = {
 
   <!-- Show when loading is done -->
   <div v-else class="bg-gray-50 h-screen">
+
+filterAccountBookDateDocFrom = {{ filterAccountBookDateDocFrom }}<br>
+filterAccountBookDateDocTo = {{ filterAccountBookDateDocTo }}<br>
+filterAccountBookDateEnterFrom = {{ filterAccountBookDateEnterFrom }}<br>
+filterAccountBookDateEnterTo = {{ filterAccountBookDateEnterTo }}<br>
+filterReportVehicleDateEnterFrom = {{ filterReportVehicleDateEnterFrom }}<br>
+filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br>
   <Dashboard 
     :storageStateBarTnvedQuantityDatax = "state.storageState.barTnvedQuantity.datax" 
     :storageStateBarTnvedQuantityDatay="state.storageState.barTnvedQuantity.datay" 
@@ -154,12 +303,21 @@ const reportVehicleListTableColumns = {
   /> 
 
   </div>
-
+</div>
 </template>
 
 
 <style lang="postcss" scoped>
 .header-btn {
   @apply mx-3 mt-1 cursor-pointer hover:text-green-400
+}
+
+.formLabelStyle {
+  @apply mx-1 block text-xs font-bold text-gray-400
+}
+
+.formInputStyle {
+  @apply border-b-2 text-base font-medium w-36 py-1 px-1 mb-2
+  hover:border-indigo-200 focus:outline-none focus:border-indigo-300 cursor-pointer
 }
 </style>
