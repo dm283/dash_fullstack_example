@@ -3,6 +3,8 @@ import { defineProps, ref, reactive, onMounted, computed } from 'vue';
 import 'primeicons/primeicons.css';
 // import router from '@/router';
 import axios from 'axios';
+import { utils, writeFileXLSX, writeFile } from 'xlsx';
+
 
 const props = defineProps({
   name: String,
@@ -57,7 +59,7 @@ const state = reactive({
 
 // loadAPIData();
 
-
+const isDropDownloadShow = ref(false);
 
 const isDropSearchShow = ref(false);
 const searchBy = ref('all');
@@ -173,8 +175,11 @@ const loadLocalData = () => {
 
 const toggleDropdown = (dropdownId) => {
   //
-  if (dropdownId == 'search') {
-    isDropSearchShow.value = (isDropSearchShow.value == true) ? false : true;
+  // if (dropdownId == 'search') {
+  //   isDropSearchShow.value = (isDropSearchShow.value == true) ? false : true;
+  // }
+  if (dropdownId == 'download') {
+    isDropDownloadShow.value = (isDropDownloadShow.value == true) ? false : true;
   }
   // else if (dropdownId == 'sort') {
   //   isDropSortShow.value = (isDropSortShow.value == true) ? false : true;
@@ -268,6 +273,24 @@ const dataLengthRender= () => {
 }
 
 
+const exportFile = (dataSet, fileName, fileType) => {
+  //
+  if (!dataSet) return;
+
+  const ws = utils.json_to_sheet(dataSet);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, "dashboard_data");
+
+  if (fileType == 'xlsx') {
+    writeFileXLSX(wb, fileName.trim() + ".xlsx");
+  } 
+  else if (fileType == 'xls') {
+    writeFile(wb, fileName.trim() + ".xls");
+  }
+  else if (fileType == 'csv') {
+    writeFile(wb, fileName.trim() + ".csv", { FS: ";" });
+  }    
+};
 
 </script>
 
@@ -285,9 +308,24 @@ const dataLengthRender= () => {
 <!-- *******************************  NAV AREA  ************************* --> 
 <nav class="text-sm font-semibold space-y-0 border-dashed border-green-500">
 
-<section class="inline-block mr-5">
-  <div class="text-xl font-normal">{{ props.name }}</div>
-</section>
+  <div class="inline-block mr-5">
+    <div class="text-xl font-normal">{{ props.name }}</div>
+  </div>
+
+  <!-- DOWNLOAD BUTTON DROPDOWN -->
+  <div class="float-right mr-1">
+    <button class="w-8 h-8 rounded-lg bg-green-400 text-white hover:opacity-75" 
+      @click="toggleDropdown('download')">
+      <i class="pi pi-download" style="font-size: 1rem"></i>
+    </button>
+    <div v-show="isDropDownloadShow" class="mt-1 -ml-11 w-20 border rounded-md border-gray-300 
+      bg-white text-xs font-semilbold absolute z-10 overflow-hidden">
+      <ul @click="toggleDropdown('download')">
+        <li class="h-8 pl-3 py-1.5 uppercase cursor-pointer hover:bg-gray-100" 
+           @click="exportFile(dataSet=props.data, fileName='dashboard_data', fileType=option)" v-for="option in ['xlsx', 'xls', 'csv']">{{ option }}</li>
+      </ul>
+    </div>
+  </div>
 
 <!-- search area ************************* --> 
 <!-- <div class="inline-block">
