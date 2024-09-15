@@ -26,9 +26,15 @@ const toggleTabs = (tabNumber) => {
 <template>
   
   <nav class="border flex bg-blue-50 text-indigo-500">
-    <div :class="{'navTabsSelected': openTab == 1, 'navTabs': openTab != 1}" @click="toggleTabs(1)">Состояние склада</div>
-    <div :class="{'navTabsSelected': openTab == 2, 'navTabs': openTab != 2}" @click="toggleTabs(2)">Книга учета</div>
-    <div :class="{'navTabsSelected': openTab == 3, 'navTabs': openTab != 3}" @click="toggleTabs(3)">Отчет ТС</div>
+    <div :class="{'navTabsSelected': openTab == 1, 'navTabs': openTab != 1}" @click="toggleTabs(1)">
+      Состояние склада
+    </div>
+    <div :class="{'navTabsSelected': openTab == 2, 'navTabs': openTab != 2}" @click="toggleTabs(2)">
+      Книга учета
+    </div>
+    <div :class="{'navTabsSelected': openTab == 3, 'navTabs': openTab != 3}" @click="toggleTabs(3)">
+      Отчет ТС
+    </div>
   </nav>
 
   <div id="dashboardContent" class="">
@@ -53,10 +59,10 @@ const toggleTabs = (tabNumber) => {
 
 <style lang="postcss" scoped>
 .navTabs {
-  @apply border rounded-t-lg px-5 py-2 cursor-pointer hover:text-indigo-600
+  @apply  rounded-t-lg px-5 py-2 cursor-pointer hover:text-indigo-600
 }
 
 .navTabsSelected {
-    @apply bg-white border rounded-t-lg px-5 py-2 cursor-pointer hover:text-indigo-600
+    @apply bg-white  rounded-t-lg px-5 py-2 cursor-pointer hover:text-indigo-600
   }
 </style>
