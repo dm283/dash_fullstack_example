@@ -1,18 +1,31 @@
 <script setup>
 import { ref, defineProps, computed, reactive } from 'vue';
-import Tab1 from '@/components/Tab1.vue';
-import Tab2 from '@/components/Tab2.vue';
-import Tab3 from '@/components/Tab3.vue';
+import TabStorageState from '@/components/TabStorageState.vue';
+import TabAccountBook from '@/components/TabAccountBook.vue';
+import TabReportVehicle from '@/components/TabReportVehicle.vue';
 
   
 const props = defineProps({
-  datax: Array,
-  datay: Array,
-  dataCardProductQuantity: 0,
-  dataCardDTQuantity: 0,
-  listName: String,
-  listData: Array,
-  listTableColumns: Object,
+  storageStateBarTnvedQuantityDatax: Array,
+  storageStateBarTnvedQuantityDatay: Array,
+  storageStateCardProductQuantity: 0,
+  storageStateCardDtQuantity: 0,
+  storageStateListProductsStorage: Array,
+  storageStateListName: String,
+  storageStateListTableColumns: Object,
+
+  accountBookBarRecTnvedQuantityDatax: Array,
+  accountBookBarRecTnvedQuantityDatay: Array,
+  accountBookCardRecProductQuantity: 0,
+  accountBookCardRecDtQuantity: 0,
+  accountBookListAccountBook: Array,
+  accountBookListName: String,
+  accountBookListTableColumns: Object,
+
+  reportVehicleListAccountBook: Array,
+  reportVehicleListName: String,
+  reportVehicleListTableColumns: Object,
+
 });
 
 const openTab = ref(1);
@@ -39,18 +52,33 @@ const toggleTabs = (tabNumber) => {
 
   <div id="dashboardContent" class="">
     <div v-if="openTab == 1">
-      <Tab1 :datax="datax" :datay="datay" 
-        :dataCardProductQuantity="dataCardProductQuantity" 
-        :dataCardDTQuantity="dataCardDTQuantity"
-        :listName="listName" :listData="listData" :listTableColumns="listTableColumns"
+      <TabStorageState
+        :storageStateBarTnvedQuantityDatax="storageStateBarTnvedQuantityDatax" 
+        :storageStateBarTnvedQuantityDatay="storageStateBarTnvedQuantityDatay" 
+        :storageStateCardProductQuantity="storageStateCardProductQuantity" 
+        :storageStateCardDtQuantity="storageStateCardDtQuantity"
+        :storageStateListName="storageStateListName" 
+        :storageStateListProductsStorage="storageStateListProductsStorage" 
+        :storageStateListTableColumns="storageStateListTableColumns"
       />
     </div>
     <div v-if="openTab == 2">
-      <Tab2 
+      <TabAccountBook
+        :accountBookBarRecTnvedQuantityDatax="accountBookBarRecTnvedQuantityDatax" 
+        :accountBookBarRecTnvedQuantityDatay="accountBookBarRecTnvedQuantityDatay" 
+        :accountBookCardRecProductQuantity="accountBookCardRecProductQuantity" 
+        :accountBookCardRecDtQuantity="accountBookCardRecDtQuantity"
+        :accountBookListName="accountBookListName" 
+        :accountBookListAccountBook="accountBookListAccountBook" 
+        :accountBookListTableColumns="accountBookListTableColumns"
       />
     </div>
     <div v-if="openTab == 3">
-      <Tab3 :listName="listName" :listData="listData" :listTableColumns="listTableColumns" />
+      <TabReportVehicle 
+        :reportVehicleListName="reportVehicleListName" 
+        :reportVehicleListAccountBook="reportVehicleListAccountBook" 
+        :reportVehicleListTableColumns="reportVehicleListTableColumns"
+        />
     </div>
   </div>
   

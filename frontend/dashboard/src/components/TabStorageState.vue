@@ -7,13 +7,21 @@ import List from '@/components/List.vue';
 
   
 const props = defineProps({
-  datax: Array,
-  datay: Array,
-  dataCardProductQuantity: 0,
-  dataCardDTQuantity: 0,
-  listName: String,
-  listData: Array,
-  listTableColumns: Object,
+  storageStateBarTnvedQuantityDatax: Array,
+  storageStateBarTnvedQuantityDatay: Array,
+  storageStateCardProductQuantity: 0,
+  storageStateCardDtQuantity: 0,
+  storageStateListName: String,
+  storageStateListProductsStorage: Array,
+  storageStateListTableColumns: Object,
+
+  // datax: Array,
+  // datay: Array,
+  // dataCardProductQuantity: 0,
+  // dataCardDTQuantity: 0,
+  // listName: String,
+  // listData: Array,
+  // listTableColumns: Object,
 });
 
 </script>
@@ -28,17 +36,17 @@ const props = defineProps({
 
         <div class="grid grid-cols-2 gap-3">
           <div class="">
-            <Card :label="'Количество товара на складе'" :value="dataCardProductQuantity" />
+            <Card :label="'Количество товара на складе'" :value="storageStateCardProductQuantity" />
           </div>
           <div class="">
-            <Card :label="'Количество ДТ на складе'" :value="dataCardDTQuantity" />
+            <Card :label="'Количество ДТ на складе'" :value="storageStateCardDtQuantity" />
           </div>
         </div>
 
         <div class=" row-span-2">
           <BarHorizont :name="'bar-h-03'" :title="'ТНВЭД на складе'" :xtitle="'Количество'" :ytitle="'Группа ТНВЭД'"
-          :datax="datax"
-          :datay="datay" 
+          :datax="storageStateBarTnvedQuantityDatax"
+          :datay="storageStateBarTnvedQuantityDatay" 
           :barcolor="'#00FF7F'" 
           />
         </div>
@@ -49,7 +57,7 @@ const props = defineProps({
 
     <div class="col-span-4">
       <div class="">
-        <List :name="listName" :data="listData" :listTableColumns="listTableColumns" />
+        <List :name="storageStateListName" :data="storageStateListProductsStorage" :listTableColumns="storageStateListTableColumns" />
       </div>
     </div>
 

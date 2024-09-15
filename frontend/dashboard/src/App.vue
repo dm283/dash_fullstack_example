@@ -4,6 +4,7 @@ import 'primeicons/primeicons.css';
 // import router from '@/router';
 import axios from 'axios';
 // import { RouterView } from 'vue-router';
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 import Navbar from './components/Navbar.vue';
 import Dashboard from './components/Dashboard.vue';
@@ -13,67 +14,65 @@ import BarHorizont from '@/components/BarHorizont.vue';
 
 const state = reactive({
   data: [],
-  tableFields: [],
-  localData: [],
-  datay: [],
-  datax: [],
+  isLoading: true,
 })
 
+// TABS & WIDGETS
+// storageState - cardProductQuantity, cardDtQuantity, barTnvedQuantity, listProductsStorage
+// accountBook - cardRecProductQuantity, cardRecDtQuantity, barRecTnvedQuantity, listAccountBook
+// reportVehicle - listReportVehicle
 
 async function getData() {
   //
   try {
       state.data = [];
-      state.tableFields = [];
-      state.localData = [];
-      state.datay = [];
-      state.datax = [];
-      state.dataCardProductQuantity = 0;
-      state.dataCardDTQuantity = 0;
-      state.listData = [];
+
+      state.storageState = {};
+      state.storageState.barTnvedQuantity = {};
+      state.storageState.barTnvedQuantity.datax = [];
+      state.storageState.barTnvedQuantity.datay = [];
+
+      state.accountBook = {};
+      state.accountBook.barRecTnvedQuantity = {};
+      state.accountBook.barRecTnvedQuantity.datax = [];
+      state.accountBook.barRecTnvedQuantity.datay = [];
+
+      state.reportVehicle = {};
 
       const response = await axios.get('http://localhost:8000/dashboard');
-      // state.data = response.data;
       state.data = response.data;
-      // console.log('data=', state.data)
-      // state.tableFields = Object.keys(state.data[0]);
 
-      // for (let xobj of state.data) {
-      //   let clonedObj = {...xobj};
-      //   state.localData.push(clonedObj);
-      // };
-
-      // for (let i of state.localData) {
-      //   state.datax.push(i['g33']);
-      //   state.datay.push(i['cnt'])
-      // }
-
-      // product_quantity
-      state.dataCardProductQuantity = state.data['product_quantity'][0]['product_quantity'];
-
-      // dt_quantity
-      state.dataCardDTQuantity = state.data['dt_quantity'][0]['dt_quantity'];
-
-      // tnved_quantity
+      state.storageState.cardProductQuantity = state.data['product_quantity'][0]['product_quantity'];
+      state.storageState.cardDtQuantity = state.data['dt_quantity'][0]['dt_quantity'];
       for (let i of state.data['tnved_quantity']) {
-        state.datax.push(i['g33']);
-        state.datay.push(i['cnt'])
-      }      
+        state.storageState.barTnvedQuantity.datax.push(i['g33']);
+        state.storageState.barTnvedQuantity.datay.push(i['cnt'])
+      }   
+      state.storageState.listProductsStorage = state.data['products_on_storage']
 
-      // 
-      state.listData = state.data['products_on_storage']
+      state.accountBook.cardRecProductQuantity = state.data['received_product_quantity'][0]['received_product_quantity'];
+      state.accountBook.cardRecDtQuantity = state.data['received_dt_quantity'][0]['received_dt_quantity'];
+      for (let i of state.data['received_tnved_quantity']) {
+        state.accountBook.barRecTnvedQuantity.datax.push(i['g33']);
+        state.accountBook.barRecTnvedQuantity.datay.push(i['cnt'])
+      }   
+      state.accountBook.listAccountBook = state.data['account_book']
 
-      console.log('listdata =', state.listData)
+      state.reportVehicle.listreportVehicle = state.data['report_vehicle']
+      
 
 
     } catch (error) {
-      console.error('Error fetching books', error);
+      console.error('Error fetching items', error);
+    } finally {
+      state.isLoading = false;
     }
 };
 
 
 async function updateData() {
   //
+  state.isLoading = true;
   await getData();
 };
 
@@ -83,10 +82,26 @@ onMounted(async () => {
 });
 
 
-const listTableColumns = {
+const storageStateListTableColumns = {
     'gtdnum':'Номер ДТ','name':'Владелец','date_in':'Дата прием','g32':'№ тов.',
     'g31':'Наименование товара','g33_in':'Код ТНВЭД','g31_3':'Кол.доп.ед', 
     'g31_3a':'Ед.изм.', 'g35':'Вес брутто', 'date_chk':'Дата ок.хр.'
+}
+
+const accountBookListTableColumns = {
+  'gtdnum': 'Номер ДТ', 'name': 'Владелец', 'date_in': 'Дата приема','time_in': 'Время приема',
+    'date_chk': 'Дата ок.хр.','g32': '№ тов.','g31': 'Наименование товара','g33_in': 'Код ТНВЭД',
+    'g35': 'Вес брутто', 'g31_3': 'Кол.доп.ед', 'g31_3a': 'Ед.изм.', 'doc_num_out': '№ ДТ выдачи',
+    'gtdregime_out': 'Режим выдачи', 'date_out': 'Дата выдачи', 'g35_out': 'Выдача брутто',
+    'g31_3_out': 'Выд.доп.ед'
+}
+
+const reportVehicleListTableColumns = {
+  'id':'№ п/п', 'gtdnum':'Номер ДТ', 'g32':'№ тов.', 'g33_in':'Код ТНВЭД', 'g31':'Наименование товара', 'g35':'Вес брутто',
+    'g31_3':'Кол.доп.ед', 'g31_3a':'Ед.изм.', 'date_in':'Дата приема', 'place':'Скл.номер', 'date_chk':'Дата ок.хр.', 
+       'exp_date':'Срок годности', 'gtdregime_out':'Режим выдачи', 'doc_num_out':'№ ДТ выдачи', 'g33_out':'Код ТНВЭД выдачи',
+    'g35_out':'Выдача брутто', 'g31_3_out':'Выд.доп.ед', 'date_out':'Дата выдачи', 
+    'g35ost_':'Остаток брутто', 'g31_3ost_':'Остаток Доп.ед',
 }
 
 </script>
@@ -108,13 +123,36 @@ const listTableColumns = {
     </div>
   </nav>
 
-  <div v-if="state.listData" class="bg-gray-50 h-screen">
-  <Dashboard :datax="state.datax" :datay="state.datay" 
-    :dataCardProductQuantity="state.dataCardProductQuantity" 
-    :dataCardDTQuantity="state.dataCardDTQuantity" 
-    :listName="'Товары на складе'" :listData="state.listData" 
-    :listTableColumns="listTableColumns"
+  <!-- Show loading spinner while loading is true -->
+  <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
+    <PulseLoader />
+     LOADING DATA...
+  </div>
+
+  <!-- Show when loading is done -->
+  <div v-else class="bg-gray-50 h-screen">
+  <Dashboard 
+    :storageStateBarTnvedQuantityDatax = "state.storageState.barTnvedQuantity.datax" 
+    :storageStateBarTnvedQuantityDatay="state.storageState.barTnvedQuantity.datay" 
+    :storageStateCardProductQuantity="state.storageState.cardProductQuantity" 
+    :storageStateCardDtQuantity="state.storageState.cardDtQuantity" 
+    :storageStateListName="'Товары на складе'" 
+    :storageStateListProductsStorage="state.storageState.listProductsStorage" 
+    :storageStateListTableColumns="storageStateListTableColumns"
+
+    :accountBookBarRecTnvedQuantityDatax = "state.accountBook.barRecTnvedQuantity.datax" 
+    :accountBookBarRecTnvedQuantityDatay="state.accountBook.barRecTnvedQuantity.datay" 
+    :accountBookCardRecProductQuantity="state.accountBook.cardRecProductQuantity" 
+    :accountBookCardRecDtQuantity="state.accountBook.cardRecDtQuantity" 
+    :accountBookListName="'Книга учета'" 
+    :accountBookListAccountBook="state.accountBook.listAccountBook" 
+    :accountBookListTableColumns="accountBookListTableColumns"
+
+    :reportVehicleListName="'Отчет ТС'" 
+    :reportVehicleListAccountBook="state.reportVehicle.listreportVehicle" 
+    :reportVehicleListTableColumns="reportVehicleListTableColumns"
   /> 
+
   </div>
 
 </template>
