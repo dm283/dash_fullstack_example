@@ -1,6 +1,7 @@
 import sys, os, configparser, pyodbc
 from pathlib import Path
 from abc import ABC, abstractmethod
+from typing import Union
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,11 +83,14 @@ select['products_on_storage'] = f"""
   ORDER BY date_in ASC,gtdnum,g32
 """
 
+#########################
+filter_string_mark = '!filter_string_mark!'
 
 select['received_product_quantity'] = f"""
   SELECT count(*) received_product_quantity
     FROM {DB_NAME}.{DB_SCHEMA}.doc_in_sklad d, {DB_NAME}.{DB_SCHEMA}.doc_in_sklad_sub s 
     WHERE s.main_id=d.id AND d.posted > 0
+    {filter_string_mark}
     
 """
 # {dashboard_filter_string}
@@ -99,6 +103,7 @@ select['received_dt_quantity'] = f"""
   SELECT count(*) received_dt_quantity
     FROM {DB_NAME}.{DB_SCHEMA}.doc_in_sklad d
     WHERE posted > 0
+    {filter_string_mark}
 """
 # {dashboard_filter_string}
 # select_filter[s6] = list()
@@ -111,7 +116,7 @@ select['received_tnved_quantity'] = f"""
   (SELECT  LEFT(s.g33_in,4) g33, count(*) cnt 
     FROM {DB_NAME}.{DB_SCHEMA}.doc_in_sklad_sub s, {DB_NAME}.{DB_SCHEMA}.doc_in_sklad d  
     where s.main_id=d.id AND d.posted > 0
-    --dashboard_filter_string
+    {filter_string_mark}
     GROUP BY LEFT(s.g33_in,4)) AS a
   ORDER BY 2 DESC
 """
@@ -130,7 +135,7 @@ select['account_book'] = f"""
   CASE WHEN g31_3a <>'КГ' THEN g31_3_out ELSE 0 END g31_3_out
   FROM {DB_NAME}.{DB_SCHEMA}.jr_sklad ) AS a
   where 1=1
-  --dashboard_filter_string
+  {filter_string_mark}
   ORDER BY date_in,id ASC,g32 ASC,f_p DESC,date_otc ASC
 """
 # select_filter[s8] = list()
@@ -160,7 +165,7 @@ FROM (SELECT j.id,j.key_id,j.g32,j.gtdnum,j.date_in,j.g31,j.g31_3,j.g31_3a,j.g33
 FROM ({DB_NAME}.{DB_SCHEMA}.jr_sklad j LEFT OUTER JOIN {DB_NAME}.{DB_SCHEMA}.units u ON u.name10=j.g31_3a) 
 LEFT OUTER JOIN {DB_NAME}.{DB_SCHEMA}.doc_in_sklad_sub s ON s.key_id=j.key_id 
 WHERE f_p='1' 
---dashboard_filter_string
+{filter_string_mark}
 ) 
 j LEFT OUTER JOIN (SELECT key_id,sum(g35_out) 
    g35sout,sum(g31_3_out) g31_3sout 
@@ -174,11 +179,45 @@ ORDER BY nn
 # select_filter[s9].append("and date_in <= 'dashboard_filter_2_1'")
 
 
+def create_select(select, select_name, filters):
+    #
+    if not filters:
+        return select[select_name].replace(filter_string_mark, '')
 
-def select_widget_data(select_name):
+    filter_substring = str()
+
+    # and d.date_doc >='dashboard_filter_0_0' and d.date_doc <= 'dashboard_filter_0_1'
+    if select_name in ['received_product_quantity', 'received_dt_quantity', 'received_tnved_quantity']:
+        if filters['filterAccountBookDateDocFrom']:
+            filter_substring += f"and d.date_doc >='{filters['filterAccountBookDateDocFrom']}'"
+        if filters['filterAccountBookDateDocTo']:
+            filter_substring += f"and d.date_doc <='{filters['filterAccountBookDateDocTo']}'"
+
+    # and date_in >='dashboard_filter_1_0' and date_in <= 'dashboard_filter_1_1'
+    if select_name in ['account_book']:
+        if filters['filterAccountBookDateEnterFrom']:
+            filter_substring += f"and date_in >='{filters['filterAccountBookDateEnterFrom']}'"
+        if filters['filterAccountBookDateEnterTo']:
+            filter_substring += f"and date_in <='{filters['filterAccountBookDateEnterTo']}'"
+
+    # and date_out >='dashboard_filter_2_0' and date_in <= 'dashboard_filter_2_1'
+    if select_name in ['report_vehicle']:
+        if filters['filterReportVehicleDateEnterFrom']:
+            filter_substring += f"and date_out >='{filters['filterReportVehicleDateEnterFrom']}'"
+        if filters['filterReportVehicleDateExitTo']:
+            filter_substring += f"and date_in <='{filters['filterReportVehicleDateExitTo']}'"
+
+    sql_query = select[select_name].replace(filter_string_mark, filter_substring)
+    
+    return sql_query
+
+
+
+def select_widget_data(select_name, filters):
     #
     with DBConnect() as db:
-        query = select[select_name]
+
+        query = create_select(select, select_name, filters)
         db.cursor.execute(query)
 
         # print('description =', db.cursor.description)
@@ -212,7 +251,7 @@ def select_widget_data(select_name):
     return objects    
 
 
-def select_dashboard_data():
+def select_dashboard_data(selects_keys_list=select, filters:Union[dict, None]=None):
     # with DBConnect() as db:
     #     query = """
     #         select * from (
@@ -231,9 +270,11 @@ def select_dashboard_data():
     #         }
     #         for data in db.cursor.fetchall()
     #     ]
+    print('filters = ', filters)
+
     objects = {}
-    for s in select:
+    for s in selects_keys_list:
         # objects = {'tnved_quantity': select_widget_data('tnved_quantity')}
-        objects[s] = select_widget_data(s)
+        objects[s] = select_widget_data(s, filters)
         
     return objects

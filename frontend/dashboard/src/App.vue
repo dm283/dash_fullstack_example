@@ -78,7 +78,8 @@ async function updateData() {
 
 const handleSubmit = async () => {
   //
-  console.log('handle submit!')
+  console.log('handle submit!')  
+
 }
 
 
@@ -137,6 +138,8 @@ const clearFilters = () => {
 
 <template>
 <div>
+
+  <!-- **************   HEADER    ******************* -->
   <nav class="bg-gradient-to-r from-gray-400 to-gray-600 px-10 py-3 text-white overflow-auto">
     <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
@@ -153,6 +156,7 @@ const clearFilters = () => {
     </div>
   </nav>
 
+  <!-- **************   FILTERS BAR    ******************* -->
   <div v-if="showFiltersBar" class="absolute z-10 right-0 border w-96 h-screen bg-white">
     <div class="p-3 bg-gray-200 overflow-auto">
     <div class="float-left text-xl ">
@@ -242,7 +246,6 @@ const clearFilters = () => {
           />   
         </div>
       </div>
-
 
       <div class="mt-10 flex justify-center space-x-5 py-3 px-5 text-center">
         <button

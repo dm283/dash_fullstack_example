@@ -33,3 +33,5 @@ backend/app/__pycache__/
 backend/venv/
 backend/logs/
 backend/config.ini
+
+todo.txt
