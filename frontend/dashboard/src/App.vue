@@ -17,6 +17,8 @@ const state = reactive({
   isLoading: true,
 })
 
+const filterSubstring = ref('')
+
 // TABS & WIDGETS
 // storageState - cardProductQuantity, cardDtQuantity, barTnvedQuantity, listProductsStorage
 // accountBook - cardRecProductQuantity, cardRecDtQuantity, barRecTnvedQuantity, listAccountBook
@@ -39,7 +41,9 @@ async function getData() {
 
       state.reportVehicle = {};
 
-      const response = await axios.get('http://localhost:8000/dashboard');
+      let query = 'http://localhost:8000/dashboard/' + filterSubstring.value
+      console.log('query =', query)
+      const response = await axios.get(query);
       state.data = response.data;
 
       state.storageState.cardProductQuantity = state.data['product_quantity'][0]['product_quantity'];
@@ -78,8 +82,38 @@ async function updateData() {
 
 const handleSubmit = async () => {
   //
-  console.log('handle submit!')  
+  console.log('handle submit!') 
+  const filters = {
+    'filterAccountBookDateDocFrom': filterAccountBookDateDocFrom, 
+    'filterAccountBookDateDocTo': filterAccountBookDateDocTo, 
+    'filterAccountBookDateEnterFrom': filterAccountBookDateEnterFrom, 
+    'filterAccountBookDateEnterTo': filterAccountBookDateEnterTo, 
+    'filterReportVehicleDateEnterFrom': filterReportVehicleDateEnterFrom, 
+    'filterReportVehicleDateExitTo': filterReportVehicleDateExitTo
+  }; 
+  filterSubstring.value = '?';
+  
+  for (let f in filters) {
+    // console.log('filters.values =', filters[f].value)
+    if (filters[f].value) {
+      filterSubstring.value += f + '=' + filters[f].value + '&'
+    }
+  }
+  
+  console.log('filterSubstring = ', filterSubstring.value)
 
+  state.isLoading = true;
+  await getData();
+
+  // filterAccountBookDateDocFrom.value
+  // filterAccountBookDateDocTo.value
+
+  // filterAccountBookDateEnterFrom.value
+  // filterAccountBookDateEnterTo.value
+
+  // filterReportVehicleDateEnterFrom.value
+  // filterReportVehicleDateExitTo.value
+   
 }
 
 
