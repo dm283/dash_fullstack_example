@@ -18,6 +18,10 @@ const state = reactive({
 })
 
 const filterSubstring = ref('')
+const isAuthorized = ref(true)
+const login = ref('');
+const password = ref('');
+const authFormMessage = ref('')
 
 // TABS & WIDGETS
 // storageState - cardProductQuantity, cardDtQuantity, barTnvedQuantity, listProductsStorage
@@ -44,6 +48,13 @@ async function getData() {
       let query = 'http://localhost:8000/dashboard/' + filterSubstring.value
       console.log('query =', query)
       const response = await axios.get(query);
+      
+      console.log('API RESPONSE =', response.status)
+      if (response.status == 200) {
+        isAuthorized.value = true;
+      };
+
+
       state.data = response.data;
 
       state.storageState.cardProductQuantity = state.data['product_quantity'][0]['product_quantity'];
@@ -67,7 +78,10 @@ async function getData() {
 
 
     } catch (error) {
-      console.error('Error fetching items', error);
+      console.error('Error fetching items', error.response.status);
+      if (error.response.status == 401) {
+        isAuthorized.value = false;
+      }
     } finally {
       state.isLoading = false;
     }
@@ -100,21 +114,11 @@ const handleSubmit = async () => {
     }
   }
   
-  console.log('filterSubstring = ', filterSubstring.value)
+  // console.log('filterSubstring = ', filterSubstring.value)
 
   state.isLoading = true;
-  await getData();
-
-  // filterAccountBookDateDocFrom.value
-  // filterAccountBookDateDocTo.value
-
-  // filterAccountBookDateEnterFrom.value
-  // filterAccountBookDateEnterTo.value
-
-  // filterReportVehicleDateEnterFrom.value
-  // filterReportVehicleDateExitTo.value
-   
-}
+  await getData();   
+};
 
 
 onMounted(async () => {
@@ -172,10 +176,94 @@ const clearFilters = async () => {
   await handleSubmit();
 }
 
+const authSubmit = async () => {
+  //
+  try {
+    const response = await axios.post(
+      'http://localhost:8000/dashboard/signin?' + 'login=' + login.value + '&password=' + password.value
+    );
+    // console.log('accepted!');
+    await getData()
+  } catch (error) {
+    // console.error('unaccepted', error);
+    authFormMessage.value = 'Некорректный логин или пароль.'
+    isAuthorized.value = false;
+  };
+}
+
+const signOut = async () => {
+  //
+  try {
+    const response = await axios.post('http://localhost:8000/dashboard/signout');
+    // console.log('sign out response =' , response.data.message)
+    if (response.data.message == 'signed out') {
+      login.value = '';
+      password.value = '';
+      isAuthorized.value = false;
+    }
+  } catch (error) {
+    console.error('unable to sign out', error);
+  }
+};
+
+
+
+
 </script>
 
 <template>
-<div class="">
+
+<div v-if="!isAuthorized" class="flex">
+    
+  <div class="mt-40 mx-auto bg-gray-50 border rounded-lg overflow-hidden">
+    <div class="py-2 px-5 bg-blue-400 text-center text-white text-lg">
+      Дашборд | Витрина таможенного склада
+    </div>
+    <form @submit.prevent="authSubmit" class="mx-5 mt-2 ">
+      <div class="my-2">
+        <label class="block mb-2">Логин</label>
+        <input
+            type="text"
+            v-model="login"
+            id="login"
+            name="login"
+            class="border rounded-lg w-full h-8 p-3"
+            placeholder=""
+            required
+            v-on:focus="authFormMessage=''"
+          />
+      </div>
+      <div class="my-2">
+        <label class="block mb-2">Пароль</label>
+        <input
+            type="password"
+            v-model="password"
+            id="password"
+            name="password"
+            class="border rounded-lg w-full h-8 p-3"
+            placeholder=""
+            required
+            v-on:focus="authFormMessage=''"
+          />
+      </div>
+      <div class="my-5 text-center">
+        <button
+          class="bg-green-500 text-white font-semibold rounded-full px-3 py-2 w-60
+            shadow-md hover:shadow-lg hover:bg-green-600"
+          type="submit"
+        >
+        Вход
+        </button>
+      </div>
+    </form>
+    <div class="mb-3 text-red-500 text-center">
+      {{ authFormMessage }}
+    </div>
+  </div>
+</div>
+
+
+<div v-if="isAuthorized" class="">
 
   <!-- **************   FILTERS BAR    ******************* -->
   <div v-if="showFiltersBar" class="absolute z-10 w-screen h-full bg-black bg-opacity-50">
@@ -303,7 +391,7 @@ const clearFilters = async () => {
       <div class="px-4 text-base">09-09-2024 17:30</div>
       <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
       <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
-      <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem"></i></div>
+      <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem" @click="signOut()"></i></div>
       <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
         <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
     </div>
