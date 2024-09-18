@@ -39,7 +39,7 @@ const props = defineProps({
           <BarChart :name="'bar-h-03'" :title="'Принятые ТНВЭД'" :xtitle="'Группа ТНВЭД'" :ytitle="'Количество'"
           :datax="accountBookBarRecTnvedQuantityDatax"
           :datay="accountBookBarRecTnvedQuantityDatay" 
-          :barcolor="'#FF69B4'" 
+          :barcolor="'#7B68EE'" 
           />
         </div>
 

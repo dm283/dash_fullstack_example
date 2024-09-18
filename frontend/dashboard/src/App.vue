@@ -157,7 +157,8 @@ const filterReportVehicleDateExitTo = ref()
 const showFiltersBar = ref(false);
 const mouseOverFiltersBar = ref(false);
 
-const clearFilters = () => {
+
+const clearFilters = async () => {
   filterAccountBookDateDocFrom.value = '';
   filterAccountBookDateDocTo.value = '';
 
@@ -166,32 +167,20 @@ const clearFilters = () => {
 
   filterReportVehicleDateEnterFrom.value = ''
   filterReportVehicleDateExitTo.value = ''
+
+  state.isLoading = true;
+  await handleSubmit();
 }
 
 </script>
 
 <template>
-<div>
-
-  <!-- **************   HEADER    ******************* -->
-  <nav class="bg-gradient-to-r from-gray-400 to-gray-600 px-10 py-3 text-white overflow-auto">
-    <div class="flex float-left text-xl">
-      <div class="px-4 border-r-2">Перспектива</div>
-      <div class="px-4 border-r-2">Dashboard</div>
-      <div class="px-4">Витрина таможенного склада</div>
-    </div>
-    <div class="flex float-right">
-      <div class="px-4 text-base">09-09-2024 17:30</div>
-      <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
-      <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
-      <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem"></i></div>
-      <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
-        <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
-    </div>
-  </nav>
+<div class="">
 
   <!-- **************   FILTERS BAR    ******************* -->
-  <div v-if="showFiltersBar" class="absolute z-10 right-0 border w-96 h-screen bg-white">
+  <div v-if="showFiltersBar" class="absolute z-10 w-screen h-full bg-black bg-opacity-50">
+    <div  class="absolute z-20 top-0 right-0 border w-96 h-full bg-white">
+  <!-- <div v-if="showFiltersBar" class="absolute z-10 right-0 border w-96 h-screen bg-white"> -->
     <div class="p-3 bg-gray-200 overflow-auto">
     <div class="float-left text-xl ">
       Фильтры данных
@@ -284,14 +273,14 @@ const clearFilters = () => {
       <div class="mt-10 flex justify-center space-x-5 py-3 px-5 text-center">
         <button
           class="bg-teal-400 text-white font-semibold rounded-full px-3 py-2 w-60
-            drop-shadow-md hover:shadow-lg hover:opacity-75"
+            drop-shadow-md hover:shadow-lg hover:bg-teal-500"
           type="submit"
         >
         Применить
         </button>
         <button
           class="bg-pink-400 text-white font-semibold rounded-full px-3 py-2 w-60
-            drop-shadow-md hover:shadow-lg hover:opacity-75"
+            drop-shadow-md hover:shadow-lg hover:bg-pink-500"
           type="button"
           @click="clearFilters()"
         >
@@ -301,6 +290,25 @@ const clearFilters = () => {
     </form>
 
   </div>
+</div>
+
+<!-- **************   HEADER    ******************* -->
+<nav class="bg-gradient-to-r from-gray-600 to-gray-400 px-10 py-3 text-white overflow-auto">
+    <div class="flex float-left text-xl">
+      <div class="px-4 border-r-2">Перспектива</div>
+      <div class="px-4 border-r-2">Dashboard</div>
+      <div class="px-4">Витрина таможенного склада</div>
+    </div>
+    <div class="flex float-right">
+      <div class="px-4 text-base">09-09-2024 17:30</div>
+      <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
+      <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
+      <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem"></i></div>
+      <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
+        <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
+    </div>
+  </nav>
+
 
   <!-- Show loading spinner while loading is true -->
   <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
@@ -309,14 +317,14 @@ const clearFilters = () => {
   </div>
 
   <!-- Show when loading is done -->
-  <div v-else class="bg-gray-50 h-screen">
+  <div v-else class="bg-gray-50 ">
 
-filterAccountBookDateDocFrom = {{ filterAccountBookDateDocFrom }}<br>
+<!-- filterAccountBookDateDocFrom = {{ filterAccountBookDateDocFrom }}<br>
 filterAccountBookDateDocTo = {{ filterAccountBookDateDocTo }}<br>
 filterAccountBookDateEnterFrom = {{ filterAccountBookDateEnterFrom }}<br>
 filterAccountBookDateEnterTo = {{ filterAccountBookDateEnterTo }}<br>
 filterReportVehicleDateEnterFrom = {{ filterReportVehicleDateEnterFrom }}<br>
-filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br>
+filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br> -->
   <Dashboard 
     :storageStateBarTnvedQuantityDatax = "state.storageState.barTnvedQuantity.datax" 
     :storageStateBarTnvedQuantityDatay="state.storageState.barTnvedQuantity.datay" 

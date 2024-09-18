@@ -77,7 +77,8 @@ const sortFieldsList = ['name', 'country', 'established', 'area', 'population'];
 const btnStyle = "bg-gray-100 rounded-full w-24 h-8 backdrop-filter backdrop-grayscale drop-shadow-lg hover:shadow-lg";  
 const dropdownLiStyle = "h-8 pl-3 py-1.5 cursor-pointer hover:bg-gray-100";
 
-
+const showItemCard = ref(false)
+const selectedItem = ref('')
 
 const loadLocalData = () => {
   // clone data [array of objects] into localData [array of objects]
@@ -298,9 +299,44 @@ const exportFile = (dataSet, fileName, fileType) => {
 
 <template>
 
-<div v-if="props.data[0]"> <!-- necessary div for waiting data from root component!!! -->
+<div class="" v-if="props.data[0]"> <!-- necessary div for waiting data from root component!!! -->
 
-<div @click="checkState()" class="max-w-max m-0 px-3 py-2 border border-gray-200 rounded-lg
+<!-- **********************   MODAL ITEM DETAILS   ************************** -->
+<div v-if="showItemCard" class="absolute z-10 top-0 left-0 w-screen h-screen bg-black bg-opacity-50
+  flex items-center justify-center">
+  <div class="flex-col w-3/5 h-4/5 bg-white rounded-lg">
+
+
+    <div class="py-3 pl-7 pr-3 bg-gray-200 rounded-t-lg overflow-auto">
+      <div class="float-left text-xl">
+        {{ props.name }}
+      </div>
+      <div class="float-right cursor-pointer hover:text-gray-500" @click="showItemCard=false">
+        <i class="pi pi-times" style="font-size: 1.5rem"></i>
+      </div>
+    </div>
+    
+    
+    <div class="h-4/5 m-7 text-sm overflow-auto">
+      <table>
+        <tr class="" v-for="field in Object.keys(props.listTableColumns)">
+          <td class="w-60 py-1 border-b font-semibold">
+            {{ props.listTableColumns[field] }}
+          </td>
+          <td class="border-b">
+            {{ selectedItem[field] }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+<div @click="checkState()" class="listArea max-w-max m-0 px-3 py-2 border border-gray-200 rounded-lg
   bg-white drop-shadow-md hover:drop-shadow-lg ">
 
 <!-- {{ props.listTableColumns }} -->
@@ -415,7 +451,7 @@ const exportFile = (dataSet, fileName, fileType) => {
 <section class="mt-2 border rounded-lg overflow-x-auto">
 <table class="">
   <thead>
-    <tr class="h-8 bg-blue-400 text-sm font-semibold text-white  text-center">
+    <tr class="h-8 bg-blue-400 text-sm font-semibold text-white text-center">
       <td class="" v-for="(field, index) in Object.keys(props.listTableColumns)">
         <div class="px-2 py-2 min-w-max">{{ props.listTableColumns[field] }}</div>
       </td>
@@ -424,7 +460,7 @@ const exportFile = (dataSet, fileName, fileType) => {
   <tbody>
     <tr class="border-t text-xs font-normal text-center 
         cursor-pointer hover:bg-gray-100" 
-        @click="" v-for="item in dataRender()">
+        @click="selectedItem=item; showItemCard=true" v-for="item in dataRender()">
       <td class="" v-for="field in Object.keys(props.listTableColumns)">
         <!-- boolean columns -->
         <div class="" v-if="typeof(item[field])=='boolean' & item[field]==true"><i class="pi pi-check-square"></i></div>
@@ -444,7 +480,7 @@ const exportFile = (dataSet, fileName, fileType) => {
 </section>
 
 <!-- ***************   PAGINATION BLOCK   ********************* -->
-<div id="paginationBlock" class="overflow-auto pt-3 pb-2">
+<div id="paginationBlock" class="absolute bottom-2 right-3 overflow-auto pt-3 pb-2">
 <div class="float-right space-x-1.5">
   <div class="paginationBtn" @click="computeRenderData('first')">
     <i class="pi pi-angle-double-left" style="font-size: 1rem"></i>
@@ -470,6 +506,10 @@ const exportFile = (dataSet, fileName, fileType) => {
 
 
 <style lang="postcss" scope>
+.listArea {
+  height: 620px;
+}
+
 .paginationBtn {
   @apply bg-gray-50 inline-block cursor-pointer w-8 h-8 border rounded-lg text-center py-1
 }

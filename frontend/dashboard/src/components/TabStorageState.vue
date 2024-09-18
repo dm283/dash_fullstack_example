@@ -47,7 +47,7 @@ const props = defineProps({
           <BarHorizont :name="'bar-h-03'" :title="'ТНВЭД на складе'" :xtitle="'Количество'" :ytitle="'Группа ТНВЭД'"
           :datax="storageStateBarTnvedQuantityDatax"
           :datay="storageStateBarTnvedQuantityDatay" 
-          :barcolor="'#00FF7F'" 
+          :barcolor="'#00E396'" 
           />
         </div>
 

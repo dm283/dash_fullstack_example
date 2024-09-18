@@ -189,23 +189,23 @@ def create_select(select, select_name, filters):
     # and d.date_doc >='dashboard_filter_0_0' and d.date_doc <= 'dashboard_filter_0_1'
     if select_name in ['received_product_quantity', 'received_dt_quantity', 'received_tnved_quantity']:
         if filters['filterAccountBookDateDocFrom']:
-            filter_substring += f"and d.date_doc >='{filters['filterAccountBookDateDocFrom']}'"
+            filter_substring += f"and d.date_doc >='{filters['filterAccountBookDateDocFrom'].replace('-', '')}'"
         if filters['filterAccountBookDateDocTo']:
-            filter_substring += f"and d.date_doc <='{filters['filterAccountBookDateDocTo']}'"
+            filter_substring += f"and d.date_doc <='{filters['filterAccountBookDateDocTo'].replace('-', '')}'"
 
     # and date_in >='dashboard_filter_1_0' and date_in <= 'dashboard_filter_1_1'
     if select_name in ['account_book']:
         if filters['filterAccountBookDateEnterFrom']:
-            filter_substring += f"and date_in >='{filters['filterAccountBookDateEnterFrom']}'"
+            filter_substring += f"and date_in >='{filters['filterAccountBookDateEnterFrom'].replace('-', '')}'"
         if filters['filterAccountBookDateEnterTo']:
-            filter_substring += f"and date_in <='{filters['filterAccountBookDateEnterTo']}'"
+            filter_substring += f"and date_in <='{filters['filterAccountBookDateEnterTo'].replace('-', '')}'"
 
     # and date_out >='dashboard_filter_2_0' and date_in <= 'dashboard_filter_2_1'
     if select_name in ['report_vehicle']:
         if filters['filterReportVehicleDateEnterFrom']:
-            filter_substring += f"and date_out >='{filters['filterReportVehicleDateEnterFrom']}'"
+            filter_substring += f"and date_out >='{filters['filterReportVehicleDateEnterFrom'].replace('-', '')}'"
         if filters['filterReportVehicleDateExitTo']:
-            filter_substring += f"and date_in <='{filters['filterReportVehicleDateExitTo']}'"
+            filter_substring += f"and date_in <='{filters['filterReportVehicleDateExitTo'].replace('-', '')}'"
 
     sql_query = select[select_name].replace(filter_string_mark, filter_substring)
     
