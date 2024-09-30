@@ -17,6 +17,7 @@ const state = reactive({
   isLoading: true,
 })
 
+const token = ref('')
 const filterSubstring = ref('')
 const isAuthorized = ref(true)
 const login = ref('');
@@ -45,14 +46,14 @@ async function getData() {
 
       state.reportVehicle = {};
 
-      let query = 'http://localhost:8000/dashboard/' + filterSubstring.value
+      let query = 'http://localhost:8000/dashboard/' + '?token=' + token.value + filterSubstring.value
       console.log('query =', query)
       const response = await axios.get(query);
       
-      console.log('API RESPONSE =', response.status)
-      if (response.status == 200) {
-        isAuthorized.value = true;
-      };
+      // console.log('API RESPONSE =', response.status)
+      // if (response.status == 200) {
+      //   isAuthorized.value = true;
+      // };
 
 
       state.data = response.data;
@@ -105,7 +106,7 @@ const handleSubmit = async () => {
     'filterReportVehicleDateEnterFrom': filterReportVehicleDateEnterFrom, 
     'filterReportVehicleDateExitTo': filterReportVehicleDateExitTo
   }; 
-  filterSubstring.value = '?';
+  filterSubstring.value = '&';
   
   for (let f in filters) {
     // console.log('filters.values =', filters[f].value)
@@ -182,7 +183,16 @@ const authSubmit = async () => {
     const response = await axios.post(
       'http://localhost:8000/dashboard/signin?' + 'login=' + login.value + '&password=' + password.value
     );
-    // console.log('accepted!');
+    console.log('accepted!');
+    console.log('response data your_new_token =', response.data.your_new_token)
+    token.value = response.data.your_new_token;
+
+    console.log('API RESPONSE =', response.status)
+    if (response.status == 202) {
+      isAuthorized.value = true;
+    };
+
+    state.isLoading = true;
     await getData()
   } catch (error) {
     // console.error('unaccepted', error);
@@ -194,7 +204,9 @@ const authSubmit = async () => {
 const signOut = async () => {
   //
   try {
-    const response = await axios.post('http://localhost:8000/dashboard/signout');
+    let query = 'http://localhost:8000/dashboard/signout' + '?token=' + token.value
+    const response = await axios.post(query);
+    // const response = await axios.post('http://localhost:8000/dashboard/signout');
     // console.log('sign out response =' , response.data.message)
     if (response.data.message == 'signed out') {
       login.value = '';
