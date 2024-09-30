@@ -1,4 +1,4 @@
-import json
+import json, random
 from typing import List, Union
 from fastapi import APIRouter, HTTPException, status, Path, Form
 from app.database import (select_dashboard_data, )
@@ -22,17 +22,19 @@ router = APIRouter()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 users_file = BASE_DIR / 'data/users/users_list.json'
+TOKEN_LIST = list()
+
 
 try:
     #  при отсутствии файла с пользователями вход без страницы аутентификации
     with open(users_file, 'r') as jsonfile:
         USERS_LIST = json.load(jsonfile)  # type = dict
     IS_AUTH_REQUIRED = True
-    IS_AUTHORIZED = False
+    # IS_AUTHORIZED = False
     print('THE FILE HAS FOUNDED, AUTH IS REQUIRED!', USERS_LIST)
 except FileNotFoundError:
     IS_AUTH_REQUIRED = False
-    IS_AUTHORIZED = True
+    # IS_AUTHORIZED = True
     print('THE FILE HAS NOT FOUNDED, AUTH IS NOT REQUIRED!')
 
 
@@ -42,15 +44,15 @@ async def user_sign_in(
     password: Union[str, None] = None,
 ):
     # user authentification
-    global IS_AUTHORIZED
+    # global IS_AUTHORIZED
     
     print(f'!!!!!! post request = *{login}* *{password}*') ######
 
     if not IS_AUTH_REQUIRED:
         return {'message': 'authorization is not required'}
     
-    if IS_AUTH_REQUIRED and IS_AUTHORIZED:
-        return {'message': 'authorization has already done'}
+    # if IS_AUTH_REQUIRED and IS_AUTHORIZED:
+    #     return {'message': 'authorization has already done'}
 
     if (not login) or (not password):
         raise HTTPException(
@@ -59,8 +61,14 @@ async def user_sign_in(
         )
         
     if login in USERS_LIST and USERS_LIST[login] == password:
-        IS_AUTHORIZED = True
-        return {'user': login}
+        # IS_AUTHORIZED = True
+
+        new_token = str(random.randint(1, 1000))
+        TOKEN_LIST.append(new_token)
+        print('new_token, TOKEN_LIST =', new_token, TOKEN_LIST) ##
+
+        # return {'user': login}
+        return {'token': new_token}
     else:
         raise HTTPException(
             status_code=401,
@@ -69,11 +77,19 @@ async def user_sign_in(
     
 
 @router.post('/signout', status_code=status.HTTP_200_OK)
-async def user_sign_out():
+async def user_sign_out(
+    token: Union[str, None] = None,
+):
     # user sign out
-    global IS_AUTHORIZED
+    # global IS_AUTHORIZED
+
     if IS_AUTH_REQUIRED:
-        IS_AUTHORIZED = False
+        # IS_AUTHORIZED = False
+        
+        print('token =', token)  ## 
+        TOKEN_LIST.remove(token)
+        print('removed, updated TOKEN_LIST =', TOKEN_LIST)  ##
+        
         return {'message': 'signed out'}
     else:
         return {'message': 'there was not an authorization'}
@@ -81,6 +97,7 @@ async def user_sign_out():
 
 @router.get('/', status_code=status.HTTP_200_OK)
 async def get_dashboard_data_filtered(
+        token: Union[str, None] = None,
         filterAccountBookDateDocFrom: Union[str, None] = None,
         filterAccountBookDateDocTo: Union[str, None] = None,
         filterAccountBookDateEnterFrom: Union[str, None] = None,
@@ -89,12 +106,20 @@ async def get_dashboard_data_filtered(
         filterReportVehicleDateExitTo: Union[str, None] = None,
         ):
     
-    if IS_AUTH_REQUIRED and (not IS_AUTHORIZED):
+    if IS_AUTH_REQUIRED and (not token or token not in TOKEN_LIST):
         raise HTTPException(
             status_code=401,
             detail='Unauthorized',
         )
     
+    # if IS_AUTH_REQUIRED and (not IS_AUTHORIZED):
+    #     raise HTTPException(
+    #         status_code=401,
+    #         detail='Unauthorized',
+    #     )
+    
+    # return {'message': 'ok! data is received'}
+
     try:
         filters = {
             "filterAccountBookDateDocFrom": filterAccountBookDateDocFrom,
