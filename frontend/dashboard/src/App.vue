@@ -183,11 +183,11 @@ const authSubmit = async () => {
     const response = await axios.post(
       'http://localhost:8000/dashboard/signin?' + 'login=' + login.value + '&password=' + password.value
     );
-    console.log('accepted!');
-    console.log('response data your_new_token =', response.data.your_new_token)
+    // console.log('accepted!');
+    // console.log('response data your_new_token =', response.data.your_new_token)
     token.value = response.data.your_new_token;
 
-    console.log('API RESPONSE =', response.status)
+    // console.log('API RESPONSE =', response.status)
     if (response.status == 202) {
       isAuthorized.value = true;
     };
