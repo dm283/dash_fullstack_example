@@ -68,7 +68,7 @@ async def user_sign_in(
         print('new_token, TOKEN_LIST =', new_token, TOKEN_LIST) ##
 
         # return {'user': login}
-        return {'token': new_token}
+        return {'your_new_token': new_token}
     else:
         raise HTTPException(
             status_code=401,
