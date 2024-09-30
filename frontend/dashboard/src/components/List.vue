@@ -66,12 +66,19 @@ const searchBy = ref('all');
 const mouseOverSearchDropdown = ref(false);
 const searchFieldsList = Object.keys(props.listTableColumns);
 
-const isDropSortShow = ref(false);
+// const isDropSortShow = ref(false);
 const sortBy = ref('default');
-const sortDirection = ref('asc');
+const sortDirection = reactive({});
+const sortIcon = reactive({});
+const sortArrowsStyle = reactive({});
+for (let field of Object.keys(props.listTableColumns)) {
+  sortDirection[field] = 'none';
+  sortIcon[field] = 'pi pi-sort';
+  sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600"
+};
+
 const sortingDataType = ref();
 const mouseOverSortDropdown = ref(false);
-const sortIcon = ref('pi pi-sort-alt');
 const sortFieldsList = ['name', 'country', 'established', 'area', 'population'];
 
 const btnStyle = "bg-gray-100 rounded-full w-24 h-8 backdrop-filter backdrop-grayscale drop-shadow-lg hover:shadow-lg";  
@@ -91,34 +98,32 @@ const loadLocalData = () => {
 };
 
 
+const sortNumbers = (direction, field) => {
+  // sort numbers
+  let x = (direction == 'asc') ? 
+    state.localData.sort((a, b) => a[field] - b[field]) : 
+    state.localData.sort((a, b) => b[field] - a[field]);
+};
 
 
-// const sortNumbers = (direction, field) => {
-//   // sort numbers
-//   let x = (direction == 'asc') ? 
-//     state.localData.sort((a, b) => a[field] - b[field]) : 
-//     state.localData.sort((a, b) => b[field] - a[field]);
-// };
+const sortStrings = (direction, field) => {
+  // sort strings
+  state.localData.sort((a, b) => {
+    const nameA = a[field].toUpperCase(); // ignore upper and lowercase
+    const nameB = b[field].toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      let x = (direction == 'asc') ? -1 : 1;
+      return x;
+    }
+    if (nameA > nameB) {
+      let x = (direction == 'asc') ? 1 : -1;
+      return x;
+    }
 
-
-// const sortStrings = (direction, field) => {
-//   // sort strings
-//   state.localData.sort((a, b) => {
-//     const nameA = a[field].toUpperCase(); // ignore upper and lowercase
-//     const nameB = b[field].toUpperCase(); // ignore upper and lowercase
-//     if (nameA < nameB) {
-//       let x = (direction == 'asc') ? -1 : 1;
-//       return x;
-//     }
-//     if (nameA > nameB) {
-//       let x = (direction == 'asc') ? 1 : -1;
-//       return x;
-//     }
-
-//     // names must be equal
-//     return 0;
-//   });
-// };
+    // names must be equal
+    return 0;
+  });
+};
 
 
 // const clickSortArrow = () => {
@@ -138,6 +143,51 @@ const loadLocalData = () => {
 // };
 
 
+const clickSortField2 = (field) => {
+  //
+  sortBy.value = field;
+
+  for (let f of Object.keys(props.listTableColumns)) {
+    if (f != field) {
+      sortDirection[f] = 'none';
+      sortIcon[f] = 'pi pi-sort';
+      sortArrowsStyle[f] = "flex-0 pr-1.5 text-blue-600";
+    };
+  };
+
+  if (sortDirection[field] == 'none') {
+    sortDirection[field] = 'asc';
+    sortIcon[field] = 'pi pi-sort-up-fill';
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300"
+  }
+  else if (sortDirection[field] == 'asc') {
+    sortDirection[field] = 'desc';
+    sortIcon[field] = 'pi pi-sort-down-fill';
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300"
+  }
+  else if (sortDirection[field] == 'desc') {
+    sortDirection[field] = 'none';
+    sortIcon[field] = 'pi pi-sort';
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600";
+    sortBy.value = 'default'
+  }
+
+
+  if (typeof(props.data[0][field]) == 'number') {
+    sortingDataType.value = 'number';
+  }
+  else if (typeof(props.data[field]) == 'string') {
+    sortingDataType.value = 'string';
+  }
+  else {
+    sortingDataType.value = 'string';
+  }
+  console.log('!!! ', props.data[0][field], sortingDataType.value)
+  sortTable();
+}
+
+
+
 // const clickSortField = (field) => {
 //   //
 //   sortBy.value = field;
@@ -154,24 +204,24 @@ const loadLocalData = () => {
 // }
 
 
-// const sortTable = () => {
-//   // sort table by certain field
-//   if (sortBy.value == 'default') { 
-//     loadLocalData();
-//     sortIcon.value = 'pi pi-sort-alt';
-//     return;
-//   };
+const sortTable = () => {
+  // sort table by certain field
+  if (sortBy.value == 'default') { 
+    loadLocalData();
+    // sortIcon.value = 'pi pi-sort-alt';
+    return;
+  };
 
-//   if (sortingDataType.value == 'string') {
-//     sortStrings(sortDirection.value, sortBy.value);
-//   }
-//   else if (sortingDataType.value == 'number') {
-//     sortNumbers(sortDirection.value, sortBy.value);
-//   }
-//   else {
-//     return;
-//   }
-// };
+  if (sortingDataType.value == 'string') {
+    sortStrings(sortDirection[sortBy.value], sortBy.value);
+  }
+  else if (sortingDataType.value == 'number') {
+    sortNumbers(sortDirection[sortBy.value], sortBy.value);
+  }
+  else {
+    return;
+  }
+};
 
 
 const toggleDropdown = (dropdownId) => {
@@ -259,7 +309,9 @@ const dataRender = () => {
     return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
   } 
   else {
-    return props.data.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage)
+    loadLocalData();
+    return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
+    //return props.data.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage)
   }
 };
 
@@ -444,16 +496,16 @@ const exportFile = (dataSet, fileName, fileType) => {
 
 </nav>
 
-
-
-
 <!-- table area ************************* --> 
 <section class="mt-2 border rounded-lg overflow-x-auto">
 <table class="">
   <thead>
     <tr class="h-8 bg-blue-400 text-sm font-semibold text-white text-center">
-      <td class="" v-for="(field, index) in Object.keys(props.listTableColumns)">
-        <div class="px-2 py-2 min-w-max">{{ props.listTableColumns[field] }}</div>
+      <td class="border" v-for="(field, index) in Object.keys(props.listTableColumns)">
+        <div class="flex px-2 py-2 min-w-max">
+          <div :class=sortArrowsStyle[field] @click="clickSortField2(field)"><i :class=sortIcon[field] style="font-size: 0.7rem"></i></div>
+          <div class="flex-1 ">{{ props.listTableColumns[field] }}</div>
+        </div>
       </td>
     </tr>
   </thead>
