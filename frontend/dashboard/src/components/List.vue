@@ -109,8 +109,9 @@ const sortNumbers = (direction, field) => {
 const sortStrings = (direction, field) => {
   // sort strings
   state.localData.sort((a, b) => {
-    const nameA = a[field].toUpperCase(); // ignore upper and lowercase
-    const nameB = b[field].toUpperCase(); // ignore upper and lowercase
+    const nameA = (a[field]) ? a[field].toString().toUpperCase() : ''; // ignore upper and lowercase
+    const nameB = (b[field]) ? b[field].toString().toUpperCase() : ''; // ignore upper and lowercase
+    // const nameB = b[field].toUpperCase(); // ignore upper and lowercase
     if (nameA < nameB) {
       let x = (direction == 'asc') ? -1 : 1;
       return x;
