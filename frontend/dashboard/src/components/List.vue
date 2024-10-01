@@ -30,6 +30,7 @@ const state = reactive({
   dataForRender: [],
   currentPage: 1,
   limitRecords: 13,
+  initRender: true,
 })
 
 // state.tableFields = Object.keys(props.data[0]); //
@@ -61,6 +62,7 @@ const state = reactive({
 
 const isDropDownloadShow = ref(false);
 
+// const isListFilterShow = ref(true);
 const isDropSearchShow = ref(false);
 const searchBy = ref('all');
 const mouseOverSearchDropdown = ref(false);
@@ -71,10 +73,16 @@ const sortBy = ref('default');
 const sortDirection = reactive({});
 const sortIcon = reactive({});
 const sortArrowsStyle = reactive({});
+const filterIcon = reactive({});
+const filterIconStyle = reactive({});
+const isListFilterShow = reactive({});
 for (let field of Object.keys(props.listTableColumns)) {
   sortDirection[field] = 'none';
   sortIcon[field] = 'pi pi-sort';
-  sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600"
+  sortArrowsStyle[field] = "flex-0 pr-1 text-blue-600 cursor-pointer";
+  filterIcon[field] = 'pi pi-filter';
+  filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer";
+  isListFilterShow[field] = false;
 };
 
 const sortingDataType = ref();
@@ -87,6 +95,7 @@ const dropdownLiStyle = "h-8 pl-3 py-1.5 cursor-pointer hover:bg-gray-100";
 const showItemCard = ref(false)
 const selectedItem = ref('')
 
+
 const loadLocalData = () => {
   // clone data [array of objects] into localData [array of objects]
   state.localData = [];
@@ -95,6 +104,18 @@ const loadLocalData = () => {
     let clonedObj = {...xobj};
     state.localData.push(clonedObj);
   };
+
+  // apply filters
+  // document.getElementById("searchInput"+field).value.toString().toUpperCase()
+  for (let field of Object.keys(props.listTableColumns)) {
+    if (document.getElementById("searchInput"+field)) {
+      let filter = document.getElementById("searchInput"+field).value.toString().toUpperCase();
+      if (filter) {
+        setFilter(field);
+      }
+    }
+  }
+
 };
 
 
@@ -152,24 +173,24 @@ const clickSortField2 = (field) => {
     if (f != field) {
       sortDirection[f] = 'none';
       sortIcon[f] = 'pi pi-sort';
-      sortArrowsStyle[f] = "flex-0 pr-1.5 text-blue-600";
+      sortArrowsStyle[f] = "flex-0 pr-1.5 text-blue-600 cursor-pointer";
     };
   };
 
   if (sortDirection[field] == 'none') {
     sortDirection[field] = 'asc';
     sortIcon[field] = 'pi pi-sort-up-fill';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300"
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer"
   }
   else if (sortDirection[field] == 'asc') {
     sortDirection[field] = 'desc';
     sortIcon[field] = 'pi pi-sort-down-fill';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300"
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer"
   }
   else if (sortDirection[field] == 'desc') {
     sortDirection[field] = 'none';
     sortIcon[field] = 'pi pi-sort';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600";
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600 cursor-pointer";
     sortBy.value = 'default'
   }
 
@@ -239,35 +260,123 @@ const toggleDropdown = (dropdownId) => {
 };
 
 
-const searchRecord = () => {
+// const searchRecord = () => {
+//   //   searchBy
+//   let newLocalData = [];
+//   let searchFieldsList = [];
+//   let pushedIds = [];
+//   let filter = document.getElementById("searchInput").value.toString().toUpperCase();
+
+//   if (searchBy.value == 'all') {
+//     searchFieldsList =  Object.keys(props.listTableColumns);
+//   } else {
+//     searchFieldsList.push(searchBy.value);
+//   }
+
+//   for (let rec of props.data) {
+//     for (let field of searchFieldsList) {
+//       if ( rec[field].toString().toUpperCase().indexOf(filter) > -1 ) {
+//         if (!pushedIds.includes(rec.id)) {
+//           newLocalData.push(rec)
+//         };
+//         pushedIds.push(rec.id);
+//       }
+//     }
+//   };
+
+//   if (newLocalData.length > 0) {
+//     state.localData = newLocalData;
+//   } else {
+//     loadLocalData();
+//   };
+
+// };
+
+const clickFilter = (field) => {
+  //
+  isListFilterShow[field] = (isListFilterShow[field]) ? false : true;
+}
+
+const setFilter = (field) => {
   //   searchBy
   let newLocalData = [];
   let searchFieldsList = [];
   let pushedIds = [];
-  let filter = document.getElementById("searchInput").value.toString().toUpperCase();
+  let filter = document.getElementById("searchInput"+field).value.toString().toUpperCase();
 
-  if (searchBy.value == 'all') {
-    searchFieldsList =  Object.keys(props.listTableColumns);
-  } else {
-    searchFieldsList.push(searchBy.value);
+  if (filter) {
+    filterIcon[field] = 'pi pi-filter-fill';
+    filterIconStyle[field] = "flex-0 pr-1 text-fuchsia-500 cursor-pointer";
+  }
+  else {
+    filterIcon[field] = 'pi pi-filter';
+    filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer";
   }
 
-  for (let rec of props.data) {
-    for (let field of searchFieldsList) {
-      if ( rec[field].toString().toUpperCase().indexOf(filter) > -1 ) {
-        if (!pushedIds.includes(rec.id)) {
-          newLocalData.push(rec)
-        };
-        pushedIds.push(rec.id);
+  // if (searchBy.value == 'all') {
+  //   searchFieldsList =  Object.keys(props.listTableColumns);
+  // } else {
+  //   searchFieldsList.push(searchBy.value);
+  // }
+
+  // searchFieldsList.push(searchBy.value);
+  // console.log('props.data[0] = ', props.data[0])
+  console.log('field = ', field)
+
+  const fieldsfiltersDict = {};
+  for (let field of Object.keys(props.listTableColumns)) {
+    if (document.getElementById("searchInput"+field)) {
+      let filterV = document.getElementById("searchInput"+field).value.toString().toUpperCase();
+      if (filterV) {
+        fieldsfiltersDict[field] = filterV;
       }
     }
+  }
+
+  console.log('fieldsfiltersDict =', fieldsfiltersDict)
+
+  if (Object.keys(fieldsfiltersDict).length == 0) {
+    loadLocalData();
+    return 0;
+  }
+
+  /////////////////
+  state.dataForFiltering = [];
+
+  for (let xobj of props.data) {
+    let clonedObj = {...xobj};
+    state.dataForFiltering.push(clonedObj);
   };
 
-  if (newLocalData.length > 0) {
-    state.localData = newLocalData;
-  } else {
-    loadLocalData();
+  for (let fieldFiltered of Object.keys(fieldsfiltersDict)) {
+
+    console.log('fieldFiltered = ', fieldFiltered)
+    newLocalData = [];
+    pushedIds = [];
+    for (let rec of state.dataForFiltering) {
+      // for (let field of searchFieldsList) {
+        if ( rec[fieldFiltered].toString().toUpperCase().indexOf(fieldsfiltersDict[fieldFiltered]) > -1 ) {
+          console.log('match =', fieldsfiltersDict[fieldFiltered], rec[fieldFiltered]) //
+          if (!pushedIds.includes(rec.id)) {
+            newLocalData.push(rec)
+          };
+          pushedIds.push(rec.id);
+        // }
+      }
+    };
+
+    console.log('newLocalData.length =', newLocalData.length)
+
+    state.dataForFiltering = newLocalData;
+
   };
+
+  state.localData = state.dataForFiltering ;
+  // if (newLocalData.length > 0) {
+  //   state.localData = newLocalData;
+  // } else {
+  //   loadLocalData();
+  // };
 
 };
   
@@ -286,7 +395,7 @@ const checkState = () => {
 const computeRenderData = (action) => {
   //
   if (action == 'right') {
-    if (state.currentPage < (Math.floor(props.data.length / state.limitRecords) + 1)) {
+    if (state.currentPage < (Math.floor(dataLengthRender() / state.limitRecords) + 1)) {
       state.currentPage++;
     }
   }
@@ -299,21 +408,28 @@ const computeRenderData = (action) => {
     state.currentPage = 1;
   }
   else if (action == 'last') {
-    state.currentPage = Math.floor(props.data.length / state.limitRecords) + 1;
+    state.currentPage = Math.floor(dataLengthRender() / state.limitRecords) + 1;
   }
   
 }
 
 const dataRender = () => {
-  // state.currentPage  state.limitRecords
-  if (state.localData.length > 0) {
-    return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
-  } 
-  else {
+  // if the content is rendering for the first time, local data array is creating
+  if (state.initRender) {
+    state.initRender = false;
     loadLocalData();
-    return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
-    //return props.data.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage)
   }
+
+  return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
+
+  // if (state.localData.length > 0) {
+  //   return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
+  // } 
+  // else {
+  //   // loadLocalData();
+  //   return state.localData.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage) 
+  //   //return props.data.slice(state.limitRecords*(state.currentPage-1), state.limitRecords*state.currentPage)
+  // }
 };
 
 const dataLengthRender= () => {
@@ -505,8 +621,16 @@ const exportFile = (dataSet, fileName, fileType) => {
       <td class="border" v-for="(field, index) in Object.keys(props.listTableColumns)">
         <div class="flex px-2 py-2 min-w-max">
           <div :class=sortArrowsStyle[field] @click="clickSortField2(field)"><i :class=sortIcon[field] style="font-size: 0.7rem"></i></div>
-          <div class="flex-1 ">{{ props.listTableColumns[field] }}</div>
+          <div :class=filterIconStyle[field] @click="clickFilter(field)"><i :class=filterIcon[field] style="font-size: 0.7rem"></i></div>
+          <div class="flex-1">{{ props.listTableColumns[field] }}</div>
         </div>
+
+        <div v-show="isListFilterShow[field]" class="absolute text-black text-sm font-semibold mt-1 ml-1
+          border border-gray-500 rounded-lg ">
+          <input class="h-8 pl-3 border rounded-lg" type="text" :id="'searchInput'+field"  
+            placeholder="Filter value" title="" @keyup="setFilter(field)">
+        </div>
+
       </td>
     </tr>
   </thead>
