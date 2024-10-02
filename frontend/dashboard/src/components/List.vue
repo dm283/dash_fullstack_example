@@ -371,6 +371,7 @@ const setFilter = (field) => {
           pushedIds.push(rec.id);
         }
       }
+
     };
 
     console.log('newLocalData.length =', newLocalData.length)
@@ -442,12 +443,13 @@ const dataRender = () => {
 
 const dataLengthRender= () => {
   //
-  if (state.localData.length > 0) {
-    return state.localData.length
-  } 
-  else {
-    return props.data.length
-  }
+  return state.localData.length
+  // if (state.localData.length > 0) {
+  //   return state.localData.length
+  // } 
+  // else {
+  //   return props.data.length
+  // }
 }
 
 
@@ -627,24 +629,27 @@ const exportFile = (dataSet, fileName, fileType) => {
   <thead>
     <tr class="h-8 bg-blue-400 text-sm font-semibold text-white text-center">
       <td class="border" v-for="(field, index) in Object.keys(props.listTableColumns)">
-        <div class="flex px-2 py-2 min-w-max">
-          <div :class=sortArrowsStyle[field] @click="clickSortField2(field)"><i :class=sortIcon[field] style="font-size: 0.7rem"></i></div>
-          <div :class=filterIconStyle[field] @click="clickFilter(field)"><i :class=filterIcon[field] style="font-size: 0.7rem"></i></div>
-          <div class="flex-1">{{ props.listTableColumns[field] }}</div>
-        </div>
+      
+        <div class="relative">
+          <div class="flex px-2 py-2 min-w-max">
+            <div :class=sortArrowsStyle[field] @click="clickSortField2(field)"><i :class=sortIcon[field] style="font-size: 0.7rem"></i></div>
+            <div :class=filterIconStyle[field] @click="clickFilter(field)"><i :class=filterIcon[field] style="font-size: 0.7rem"></i></div>
+            <div class="flex-1">{{ props.listTableColumns[field] }}</div>
+          </div>
 
-        <div v-show="isListFilterShow[field]" class="absolute text-black text-sm font-semibold mt-1 ml-1
-          border border-gray-500 rounded-lg ">
-          <input class="h-8 pl-3 border rounded-lg" type="text" :id="'searchInput'+field"  
-            placeholder="Filter value" title="" @keyup="setFilter(field)">
+          <div v-show="isListFilterShow[field]" class="absolute text-black text-sm font-semibold mt-1 ml-1
+            border-4 border-indigo-500 rounded-lg shadow-lg overflow-hidden">
+            <input class="h-8 pl-3" type="text" :id="'searchInput'+field"  
+              placeholder="Filter value" title="" @keyup="setFilter(field)">
+          </div>
         </div>
 
       </td>
     </tr>
   </thead>
   <tbody>
-    <tr class="border-t text-xs font-normal text-center 
-        cursor-pointer hover:bg-gray-100" 
+    <tr v-if="dataLengthRender()==0"><td><div class="h-11"></div></td></tr>
+    <tr class="border-t text-xs font-normal text-center cursor-pointer hover:bg-gray-100" 
         @click="selectedItem=item; showItemCard=true" v-for="item in dataRender()">
       <td class="" v-for="field in Object.keys(props.listTableColumns)">
         <!-- boolean columns -->
