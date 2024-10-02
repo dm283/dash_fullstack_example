@@ -350,18 +350,26 @@ const setFilter = (field) => {
 
   for (let fieldFiltered of Object.keys(fieldsfiltersDict)) {
 
-    console.log('fieldFiltered = ', fieldFiltered)
+    // console.log('fieldFiltered = ', fieldFiltered)
     newLocalData = [];
     pushedIds = [];
     for (let rec of state.dataForFiltering) {
-      // for (let field of searchFieldsList) {
+
+      if ( typeof(rec[fieldFiltered])=='string' ) {
         if ( rec[fieldFiltered].toString().toUpperCase().indexOf(fieldsfiltersDict[fieldFiltered]) > -1 ) {
-          console.log('match =', fieldsfiltersDict[fieldFiltered], rec[fieldFiltered]) //
           if (!pushedIds.includes(rec.id)) {
             newLocalData.push(rec)
           };
           pushedIds.push(rec.id);
-        // }
+        }
+      }
+      else if ( typeof(rec[fieldFiltered])=='number' ) {
+        if ( rec[fieldFiltered].toString() == fieldsfiltersDict[fieldFiltered].toString() ) {
+          if (!pushedIds.includes(rec.id)) {
+            newLocalData.push(rec)
+          };
+          pushedIds.push(rec.id);
+        }
       }
     };
 
