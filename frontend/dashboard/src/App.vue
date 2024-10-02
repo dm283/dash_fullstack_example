@@ -409,7 +409,7 @@ const signOut = async () => {
 </div>
 
 <!-- **************   HEADER    ******************* -->
-<nav class="bg-gradient-to-r from-gray-600 to-gray-400 px-10 py-3 text-white overflow-auto">
+<nav class="bg-gradient-to-r from-blue-600 to-blue-400 px-10 py-3 text-white overflow-auto">
     <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
       <div class="px-4 border-r-2">Dashboard</div>
@@ -435,12 +435,7 @@ const signOut = async () => {
   <!-- Show when loading is done -->
   <div v-else class="bg-gray-50 ">
 
-<!-- filterAccountBookDateDocFrom = {{ filterAccountBookDateDocFrom }}<br>
-filterAccountBookDateDocTo = {{ filterAccountBookDateDocTo }}<br>
-filterAccountBookDateEnterFrom = {{ filterAccountBookDateEnterFrom }}<br>
-filterAccountBookDateEnterTo = {{ filterAccountBookDateEnterTo }}<br>
-filterReportVehicleDateEnterFrom = {{ filterReportVehicleDateEnterFrom }}<br>
-filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br> -->
+
   <Dashboard 
     :storageStateBarTnvedQuantityDatax = "state.storageState.barTnvedQuantity.datax" 
     :storageStateBarTnvedQuantityDatay="state.storageState.barTnvedQuantity.datay" 
@@ -470,7 +465,7 @@ filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br> -->
 
 <style lang="postcss" scoped>
 .header-btn {
-  @apply mx-3 mt-1 cursor-pointer hover:text-green-400
+  @apply mx-3 mt-1 text-teal-200 cursor-pointer hover:text-teal-400
 }
 
 .formLabelStyle {

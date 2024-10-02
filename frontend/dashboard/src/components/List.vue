@@ -76,9 +76,9 @@ const isListFilterShow = reactive({});
 for (let field of Object.keys(props.listTableColumns)) {
   sortDirection[field] = 'none';
   sortIcon[field] = 'pi pi-sort';
-  sortArrowsStyle[field] = "flex-0 pr-1 text-blue-600 cursor-pointer";
+  sortArrowsStyle[field] = "flex-0 pr-1 text-blue-600 cursor-pointer hover:opacity-50";
   filterIcon[field] = 'pi pi-filter';
-  filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer";
+  filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer hover:opacity-50";
   isListFilterShow[field] = false;
 };
 
@@ -170,24 +170,24 @@ const clickSortField2 = (field) => {
     if (f != field) {
       sortDirection[f] = 'none';
       sortIcon[f] = 'pi pi-sort';
-      sortArrowsStyle[f] = "flex-0 pr-1.5 text-blue-600 cursor-pointer";
+      sortArrowsStyle[f] = "flex-0 pr-1.5 text-blue-600 cursor-pointer hover:opacity-50";
     };
   };
 
   if (sortDirection[field] == 'none') {
     sortDirection[field] = 'asc';
     sortIcon[field] = 'pi pi-sort-up-fill';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer"
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer hover:opacity-50"
   }
   else if (sortDirection[field] == 'asc') {
     sortDirection[field] = 'desc';
     sortIcon[field] = 'pi pi-sort-down-fill';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer"
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-orange-300 cursor-pointer hover:opacity-50"
   }
   else if (sortDirection[field] == 'desc') {
     sortDirection[field] = 'none';
     sortIcon[field] = 'pi pi-sort';
-    sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600 cursor-pointer";
+    sortArrowsStyle[field] = "flex-0 pr-1.5 text-blue-600 cursor-pointer hover:opacity-50";
     sortBy.value = 'default'
   }
 
@@ -303,11 +303,11 @@ const setFilter = (field) => {
 
   if (filter) {
     filterIcon[field] = 'pi pi-filter-fill';
-    filterIconStyle[field] = "flex-0 pr-1 text-fuchsia-500 cursor-pointer";
+    filterIconStyle[field] = "flex-0 pr-1 text-fuchsia-500 cursor-pointer hover:opacity-50";
   }
   else {
     filterIcon[field] = 'pi pi-filter';
-    filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer";
+    filterIconStyle[field] = "flex-0 pr-1 text-emerald-600 cursor-pointer hover:opacity-50";
   }
 
   // if (searchBy.value == 'all') {

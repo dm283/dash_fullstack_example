@@ -30,7 +30,7 @@ const props = defineProps({
   
   <div class="grid grid-cols-6 gap-3 m-2">
 
-    <div class="col-span-2">
+    <div class="col-span-2 w-fit">
 
       <div class="grid grid-rows-3 grid-flow-col gap-3">
 
@@ -43,7 +43,7 @@ const props = defineProps({
           </div>
         </div>
 
-        <div class=" row-span-2">
+        <div class="row-span-2">
           <BarHorizont :name="'bar-h-03'" :title="'ТНВЭД на складе'" :xtitle="'Количество'" :ytitle="'Группа ТНВЭД'"
           :datax="storageStateBarTnvedQuantityDatax"
           :datay="storageStateBarTnvedQuantityDatay" 
