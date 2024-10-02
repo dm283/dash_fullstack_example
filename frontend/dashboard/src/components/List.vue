@@ -13,9 +13,6 @@ const props = defineProps({
 });
 
 
-console.log('props listTableColumns =', Object.keys(props.listTableColumns))
-
-
 // const locatDataKeys = computed(() => {
 //   return props.data;
 // })

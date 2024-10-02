@@ -162,6 +162,20 @@ const filterReportVehicleDateExitTo = ref()
 const showFiltersBar = ref(false);
 const mouseOverFiltersBar = ref(false);
 
+// const formInputStyle2 = ref(
+//   (filterAccountBookDateDocFrom.value) ? 
+//   'border-b-2 border-blue-300 text-green-300 text-base font-medium w-36 py-1 px-1 mb-2 \
+//   hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer' :
+//   'border-b-2 border-blue-300 text-red-300 text-base font-medium w-36 py-1 px-1 mb-2 \
+//   hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer'
+// );
+
+// const formInputStyle11 = ref('border-b-2 border-blue-300 text-green-300 text-base font-medium w-36 py-1 px-1 mb-2 \
+//   hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer')
+//   const formInputStyle12 = ref('border-b-2 border-blue-300 text-red-300 text-base font-medium w-36 py-1 px-1 mb-2 \
+//   hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer')
+
+const testA = ref(true)
 
 const clearFilters = async () => {
   filterAccountBookDateDocFrom.value = '';
@@ -292,27 +306,27 @@ const signOut = async () => {
 
     <form @submit.prevent="handleSubmit" class="mx-0 mt-3 ">
 
-      <div class="mt-5 mb-2 ml-3">КНИГА УЧЁТА</div>
+      <div class="mt-5 mb-2 ml-3 font-semibold">КНИГА УЧЁТА</div>
 
       <div class="mx-5 mb-2">
         <label class="formLabelStyle">date_doc</label>
-        <div class="flex border">
-          <div>c</div>
+        <div class="flex ">
+          <div class="pt-1">c</div>
           <input
             type="date"
             v-model="filterAccountBookDateDocFrom"
             id="filterAccountBookDateDocFrom"
             name="filterAccountBookDateDocFrom"
-            class="formInputStyle"
+            :class="filterAccountBookDateDocFrom ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />
-          <div>по</div>
+          <div class="pt-1">по</div>
           <input
             type="date"
             v-model="filterAccountBookDateDocTo"
             id="filterAccountBookDateDocTo"
             name="filterAccountBookDateDocTo"
-            class="formInputStyle"
+            :class="filterAccountBookDateDocTo ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />   
         </div>
@@ -320,23 +334,23 @@ const signOut = async () => {
 
       <div class="mx-5 mb-2">
         <label class="formLabelStyle">Дата приёма</label>
-        <div class="flex border">
-          <div>c</div>
+        <div class="flex ">
+          <div class="pt-1">c</div>
           <input
             type="date"
             v-model="filterAccountBookDateEnterFrom"
             id="filterAccountBookDateEnterFrom"
             name="filterAccountBookDateEnterFrom"
-            class="formInputStyle"
+            :class="filterAccountBookDateEnterFrom ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />
-          <div>по</div>
+          <div class="pt-1">по</div>
           <input
             type="date"
             v-model="filterAccountBookDateEnterTo"
             id="filterAccountBookDateEnterTo"
             name="filterAccountBookDateEnterTo"
-            class="formInputStyle"
+            :class="filterAccountBookDateEnterTo ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />   
         </div>
@@ -344,35 +358,37 @@ const signOut = async () => {
 
       <hr class="mt-7"> 
 
-      <div class="mt-5 mb-2 ml-3">ОТЧЁТ ТС</div>
+      <div class="mt-5 mb-2 ml-3 font-semibold">ОТЧЁТ ТС</div>
 
       <div class="mx-5 mb-2">
         <label class="formLabelStyle">Дата выдачи - Дата приёма</label>
-        <div class="flex border">
-          <div>c</div>
+        <div class="flex ">
+          <div class="pt-1">c</div>
           <input
             type="date"
             v-model="filterReportVehicleDateEnterFrom"
             id="filterDateDocFrom"
             name="filterDateDocFrom"
-            class="formInputStyle"
+            :class="filterReportVehicleDateEnterFrom ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />
-          <div>по</div>
+          <div class="pt-1">по</div>
           <input
             type="date"
             v-model="filterReportVehicleDateExitTo"
             id="filterDateDocTo"
             name="filterDateDocTo"
-            class="formInputStyle"
+            :class="filterReportVehicleDateExitTo ? 'formInputStyleFilled' : 'formInputStyle'"
             placeholder=""
           />   
         </div>
       </div>
 
-      <div class="mt-10 flex justify-center space-x-5 py-3 px-5 text-center">
+      <hr class="mt-7">
+
+      <div class="mt-7 flex justify-center space-x-5 py-3 px-5 text-center">
         <button
-          class="bg-teal-400 text-white font-semibold rounded-full px-3 py-2 w-60
+          class="bg-teal-400 text-white font-semibold rounded-full w-60
             drop-shadow-md hover:shadow-lg hover:bg-teal-500"
           type="submit"
         >
@@ -458,11 +474,16 @@ filterReportVehicleDateExitTo = {{ filterReportVehicleDateExitTo }}<br> -->
 }
 
 .formLabelStyle {
-  @apply mx-1 block text-xs font-bold text-gray-400
+  @apply mx-1 block text-xs font-bold text-blue-500
 }
 
 .formInputStyle {
-  @apply border-b-2 text-base font-medium w-36 py-1 px-1 mb-2
-  hover:border-indigo-200 focus:outline-none focus:border-indigo-300 cursor-pointer
+  @apply border-b-2 border-blue-300 text-gray-300 text-base font-medium w-36 py-1 px-1 mb-2
+  hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer
+}
+
+.formInputStyleFilled {
+  @apply border-b-2 border-blue-300 text-gray-600 text-base font-medium w-36 py-1 px-1 mb-2
+  hover:border-blue-400 focus:outline-none focus:border-blue-500 cursor-pointer
 }
 </style>
