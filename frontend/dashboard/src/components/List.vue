@@ -534,7 +534,7 @@ const exportFile = (dataSet, fileName, fileType) => {
       bg-white text-xs font-semilbold absolute z-10 overflow-hidden">
       <ul @click="toggleDropdown('download')">
         <li class="h-8 pl-3 py-1.5 uppercase cursor-pointer hover:bg-gray-100" 
-           @click="exportFile(dataSet=props.data, fileName='dashboard_data', fileType=option)" v-for="option in ['xlsx', 'xls', 'csv']">{{ option }}</li>
+           @click="exportFile(dataSet=state.localData, fileName='dashboard_data', fileType=option)" v-for="option in ['xlsx', 'xls', 'csv']">{{ option }}</li>
       </ul>
     </div>
   </div>
