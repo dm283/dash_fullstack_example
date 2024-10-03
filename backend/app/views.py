@@ -46,7 +46,7 @@ async def user_sign_in(
     # user authentification
     # global IS_AUTHORIZED
     
-    print(f'!!!!!! post request = *{login}* *{password}*') ######
+    # print(f'!!!!!! post request = *{login}* *{password}*') ######
 
     if not IS_AUTH_REQUIRED:
         return {'message': 'authorization is not required'}
@@ -63,9 +63,9 @@ async def user_sign_in(
     if login in USERS_LIST and USERS_LIST[login] == password:
         # IS_AUTHORIZED = True
 
-        new_token = str(random.randint(1, 1000))
+        new_token = str(random.randint(1, 1000000))
         TOKEN_LIST.append(new_token)
-        print('new_token, TOKEN_LIST =', new_token, TOKEN_LIST) ##
+        # print('new_token, TOKEN_LIST =', new_token, TOKEN_LIST) ##
 
         # return {'user': login}
         return {'your_new_token': new_token}
@@ -86,9 +86,9 @@ async def user_sign_out(
     if IS_AUTH_REQUIRED:
         # IS_AUTHORIZED = False
         
-        print('token =', token)  ## 
+        # print('token =', token)  ## 
         TOKEN_LIST.remove(token)
-        print('removed, updated TOKEN_LIST =', TOKEN_LIST)  ##
+        # print('removed, updated TOKEN_LIST =', TOKEN_LIST)  ##
         
         return {'message': 'signed out'}
     else:

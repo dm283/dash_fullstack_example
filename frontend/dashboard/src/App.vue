@@ -58,6 +58,9 @@ async function getData() {
 
       state.data = response.data;
 
+      state.companyName = state.data['company_name']
+      state.updateDateTime = state.data['current_datetime']
+
       state.storageState.cardProductQuantity = state.data['product_quantity'][0]['product_quantity'];
       state.storageState.cardDtQuantity = state.data['dt_quantity'][0]['dt_quantity'];
       for (let i of state.data['tnved_quantity']) {
@@ -411,12 +414,13 @@ const signOut = async () => {
 <!-- **************   HEADER    ******************* -->
 <nav class="bg-gradient-to-r from-sky-600 to-sky-400 px-10 py-3 text-white overflow-auto">  
   <div class="flex float-left text-xl">
-      <div class="px-4 border-r-2">Перспектива</div>
+      <div class="px-4 border-r-2">{{ state.companyName }}</div>
       <div class="px-4 border-r-2">Dashboard</div>
       <div class="px-4">Витрина таможенного склада</div>
     </div>
     <div class="flex float-right">
-      <div class="px-4 text-base">09-09-2024 17:30</div>
+      <div class="px-4 text-base">{{ state.updateDateTime }}</div>
+      <!-- 09-09-2024 17:30 -->
       <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
       <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
       <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem" @click="signOut()"></i></div>

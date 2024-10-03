@@ -2,6 +2,7 @@ import sys, os, configparser, pyodbc
 from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import Union
+from datetime import datetime
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,6 +16,9 @@ else:
 
 
 DB_CONNECTION_STRING = config['db']['db_connection_string']
+DB_NAME = config['db']['db_name']
+DB_SCHEMA = config['db']['db_schema']
+COMPANY_NAME = config['content']['company_name']
 
 
 class Database(ABC):
@@ -48,10 +52,6 @@ class DBConnect(Database):
 
     def connect_to_database(self):
         return self.driver.connect(DB_CONNECTION_STRING)
-
-
-DB_NAME = 'Luding'
-DB_SCHEMA = 'dbo'
 
 
 select = {}
@@ -277,4 +277,7 @@ def select_dashboard_data(selects_keys_list=select, filters:Union[dict, None]=No
         # objects = {'tnved_quantity': select_widget_data('tnved_quantity')}
         objects[s] = select_widget_data(s, filters)
         
+    objects['company_name'] = COMPANY_NAME
+    objects['current_datetime'] = datetime.now().strftime("%d-%m-%Y %H:%M")
+
     return objects
