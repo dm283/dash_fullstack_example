@@ -454,6 +454,8 @@ const exportFile = (dataSet, fileName, fileType) => {
   //
   if (!dataSet) return;
 
+  console.log('export data =', dataSet)
+
   const ws = utils.json_to_sheet(dataSet);
   const wb = utils.book_new();
   utils.book_append_sheet(wb, ws, "dashboard_data");
