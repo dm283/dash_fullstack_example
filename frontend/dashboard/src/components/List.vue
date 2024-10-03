@@ -652,12 +652,20 @@ const exportFile = (dataSet, fileName, fileType) => {
         <!-- boolean columns -->
         <div class="" v-if="typeof(item[field])=='boolean' & item[field]==true"><i class="pi pi-check-square"></i></div>
         <div class="" v-else-if="typeof(item[field])=='boolean' & item[field]==false"><i class="pi pi-stop"></i></div>
-        <!-- date columns -->
+        <!-- date columns
         <div class="" v-else-if="field=='established'">
           {{ item[field].slice(8, 10) }}/{{ item[field].slice(5, 7) }}/{{ item[field].slice(0, 4) }}
+        </div> -->
+        <!-- date columns -->
+        <div class="px-2 py-2 min-w-max" v-else-if="['Дата', 'Время'].some(el => props.listTableColumns[field].includes(el))">  
+          <!-- {{ item[field].slice(0,20) }} -->  <!-- min-w-max -->
+          {{ item[field] }}
         </div>
         <!-- string columns -->
-        <div class="px-2 py-2 text-left min-w-max" v-else-if="typeof(item[field])=='string'">{{ item[field].slice(0,20) }}</div>
+        <div class="px-2 py-2 text-left max-w-48 truncate" v-else-if="typeof(item[field])=='string'">
+          <!-- {{ item[field].slice(0,20) }} -->  <!-- min-w-max -->
+          {{ item[field] }}
+        </div>
         <!-- other columns -->
         <div class="px-2 py-2 min-w-max" v-else>{{ item[field] }}</div>
       </td>

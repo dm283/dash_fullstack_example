@@ -388,15 +388,15 @@ const signOut = async () => {
 
       <div class="mt-7 flex justify-center space-x-5 py-3 px-5 text-center">
         <button
-          class="bg-teal-400 text-white font-semibold rounded-full w-60
-            drop-shadow-md hover:shadow-lg hover:bg-teal-500"
+          class="bg-sky-400 text-white font-semibold rounded-full w-60
+            drop-shadow-md hover:shadow-lg hover:bg-sky-500"
           type="submit"
         >
         Применить
         </button>
         <button
-          class="bg-pink-400 text-white font-semibold rounded-full px-3 py-2 w-60
-            drop-shadow-md hover:shadow-lg hover:bg-pink-500"
+          class="bg-rose-400 text-white font-semibold rounded-full px-3 py-2 w-60
+            drop-shadow-md hover:shadow-lg hover:bg-rose-500"
           type="button"
           @click="clearFilters()"
         >
@@ -409,8 +409,8 @@ const signOut = async () => {
 </div>
 
 <!-- **************   HEADER    ******************* -->
-<nav class="bg-gradient-to-r from-blue-600 to-blue-400 px-10 py-3 text-white overflow-auto">
-    <div class="flex float-left text-xl">
+<nav class="bg-gradient-to-r from-sky-600 to-sky-400 px-10 py-3 text-white overflow-auto">  
+  <div class="flex float-left text-xl">
       <div class="px-4 border-r-2">Перспектива</div>
       <div class="px-4 border-r-2">Dashboard</div>
       <div class="px-4">Витрина таможенного склада</div>
@@ -465,7 +465,7 @@ const signOut = async () => {
 
 <style lang="postcss" scoped>
 .header-btn {
-  @apply mx-3 mt-1 text-teal-200 cursor-pointer hover:text-teal-400
+  @apply mx-3 mt-1 text-teal-200 cursor-pointer hover:text-gray-300
 }
 
 .formLabelStyle {
