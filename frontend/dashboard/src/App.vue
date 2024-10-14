@@ -469,7 +469,7 @@ const signOut = async () => {
 
 <style lang="postcss" scoped>
 .header-btn {
-  @apply inline-block mx-3 mt-1 text-teal-200 cursor-pointer hover:text-gray-300
+  @apply inline-block mx-3 mt-1 text-yellow-100 cursor-pointer hover:text-yellow-300
 }
 
 .formLabelStyle {
