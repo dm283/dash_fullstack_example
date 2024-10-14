@@ -413,21 +413,21 @@ const signOut = async () => {
 
 <!-- **************   HEADER    ******************* -->
 <nav class="bg-gradient-to-r from-sky-600 to-sky-400 px-10 py-3 text-white overflow-auto">  
-  <div class="flex float-left text-xl">
-      <div class="px-4 border-r-2">{{ state.companyName }}</div>
-      <div class="px-4 border-r-2">Dashboard</div>
-      <div class="px-4">Витрина таможенного склада</div>
-    </div>
-    <div class="flex float-right">
-      <div class="px-4 text-base">{{ state.updateDateTime }}</div>
-      <!-- 09-09-2024 17:30 -->
-      <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
-      <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
-      <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem" @click="signOut()"></i></div>
-      <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
-        <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
-    </div>
-  </nav>
+  <div class="text-center lg:flex lg:float-left text-xl">
+    <div class="inline-block px-4 border-r-2">{{ state.companyName }}</div>
+    <div class="inline-block px-4 border-r-2">Dashboard</div>
+    <div class="inline-block px-4">Витрина таможенного склада</div>
+  </div>
+  <div class="text-center lg:flex lg:float-right">
+    <div class="inline-block px-4 text-base">{{ state.updateDateTime }}</div>
+    <!-- 09-09-2024 17:30 -->
+    <div class="header-btn"><i class="pi pi-refresh" style="font-size: 1.3rem" @click="updateData()"></i></div>
+    <div class="header-btn"><i class="pi pi-ellipsis-v" style="font-size: 1.3rem"></i></div>
+    <div class="header-btn"><i class="pi pi-sign-out" style="font-size: 1.3rem" @click="signOut()"></i></div>
+    <div class="header-btn" @click="showFiltersBar=(showFiltersBar) ? false:true">
+      <i class="pi pi-filter" style="font-size: 1.3rem"></i></div>
+  </div>
+</nav>
 
 
   <!-- Show loading spinner while loading is true -->
@@ -469,7 +469,7 @@ const signOut = async () => {
 
 <style lang="postcss" scoped>
 .header-btn {
-  @apply mx-3 mt-1 text-teal-200 cursor-pointer hover:text-gray-300
+  @apply inline-block mx-3 mt-1 text-teal-200 cursor-pointer hover:text-gray-300
 }
 
 .formLabelStyle {
