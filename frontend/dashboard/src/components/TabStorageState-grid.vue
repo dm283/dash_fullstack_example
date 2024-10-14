@@ -14,17 +14,25 @@ const props = defineProps({
   storageStateListName: String,
   storageStateListProductsStorage: Array,
   storageStateListTableColumns: Object,
+
+  // datax: Array,
+  // datay: Array,
+  // dataCardProductQuantity: 0,
+  // dataCardDTQuantity: 0,
+  // listName: String,
+  // listData: Array,
+  // listTableColumns: Object,
 });
 
 </script>
 
 <template>
   
-  <div class="flex flex-col md:flex-row m-2 gap-3 ">
+  <div class="grid grid-cols-6 gap-3 m-2">
 
-    <div class="flex-none w-fit md:w-auto">
-      
-      <div class="flex flex-col gap-3">
+    <div class="col-span-2 w-fit">
+
+      <div class="grid grid-rows-3 grid-flow-col gap-3">
 
         <div class="grid grid-cols-2 gap-3">
           <div class="">
@@ -35,7 +43,7 @@ const props = defineProps({
           </div>
         </div>
 
-        <div class="">
+        <div class="row-span-2">
           <BarHorizont :name="'bar-h-03'" :title="'ТНВЭД на складе'" :xtitle="'Количество'" :ytitle="'Группа ТНВЭД'"
           :datax="storageStateBarTnvedQuantityDatax"
           :datay="storageStateBarTnvedQuantityDatay" 
@@ -47,7 +55,7 @@ const props = defineProps({
 
     </div>
 
-    <div class="flex-auto w-auto md:w-64">
+    <div class="col-span-4">
       <div class="">
         <List :name="storageStateListName" :data="storageStateListProductsStorage" :listTableColumns="storageStateListTableColumns" />
       </div>

@@ -20,11 +20,11 @@ const props = defineProps({
 
 <template>
   
-  <div class="flex flex-col md:flex-row m-2 gap-3 ">
+  <div class="grid grid-cols-6 gap-3 m-2">
 
-    <div class="flex-none w-fit md:w-auto">
-      
-      <div class="flex flex-col gap-3">
+    <div class="col-span-2">
+
+      <div class="grid grid-rows-3 grid-flow-col gap-3">
 
         <div class="grid grid-cols-2 gap-3">
           <div class="">
@@ -35,7 +35,7 @@ const props = defineProps({
           </div>
         </div>
 
-        <div class="">
+        <div class=" row-span-2">
           <BarChart :name="'bar-h-03'" :title="'Принятые ТНВЭД'" :xtitle="'Группа ТНВЭД'" :ytitle="'Количество'"
           :datax="accountBookBarRecTnvedQuantityDatax"
           :datay="accountBookBarRecTnvedQuantityDatay" 
@@ -47,13 +47,13 @@ const props = defineProps({
 
     </div>
 
-    <div class="flex-auto w-auto md:w-64">
+    <div class="col-span-4">
       <div class="">
         <List :name="accountBookListName" :data="accountBookListAccountBook" :listTableColumns="accountBookListTableColumns" />
       </div>
     </div>
 
-    </div>
+  </div>
   
 </template>
 
