@@ -11,6 +11,7 @@
   "dependencies": {
     "apexcharts": "^3.53.0",
     "axios": "^1.7.7",
+    "config-ini-parser": "^1.6.1",
     "primeicons": "^7.0.0",
     "vue": "^3.4.29",
     "vue-router": "^4.4.3",

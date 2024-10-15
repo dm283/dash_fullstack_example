@@ -12,6 +12,18 @@ import BarChart from '@/components/BarChart.vue';
 import BarHorizont from '@/components/BarHorizont.vue';
 
 
+// import from config.ini file in backend folder
+import data from "../../../backend/config.ini?raw";
+import { ConfigIniParser } from "config-ini-parser";
+let parser = new ConfigIniParser(); //Use default delimiter
+parser.parse(data);
+var backendIpAddress = parser.get("main", "backend_ip_address");
+var backendPort = parser.get("main", "backend_port");
+var companyName = parser.get("content", "company_name");
+console.log('backendIpAddress =', backendIpAddress)
+console.log('backendPort =', backendPort)
+
+
 const state = reactive({
   data: [],
   isLoading: true,
@@ -46,7 +58,8 @@ async function getData() {
 
       state.reportVehicle = {};
 
-      let query = 'http://localhost:8000/dashboard/' + '?token=' + token.value + filterSubstring.value
+      let query = `http://${backendIpAddress}:${backendPort}/dashboard/` + '?token=' + token.value + filterSubstring.value
+      //let query = 'http://localhost:8000/dashboard/' + '?token=' + token.value + filterSubstring.value
       console.log('query =', query)
       const response = await axios.get(query);
       
@@ -198,7 +211,9 @@ const authSubmit = async () => {
   //
   try {
     const response = await axios.post(
-      'http://localhost:8000/dashboard/signin?' + 'login=' + login.value + '&password=' + password.value
+      
+      `http://${backendIpAddress}:${backendPort}/dashboard/signin?` + 'login=' + login.value + '&password=' + password.value
+      // 'http://localhost:8000/dashboard/signin?' + 'login=' + login.value + '&password=' + password.value
     );
     // console.log('accepted!');
     // console.log('response data your_new_token =', response.data.your_new_token)
@@ -221,7 +236,8 @@ const authSubmit = async () => {
 const signOut = async () => {
   //
   try {
-    let query = 'http://localhost:8000/dashboard/signout' + '?token=' + token.value
+    let query = `http:///${backendIpAddress}:${backendPort}/dashboard/signout` + '?token=' + token.value
+    // let query = 'http://localhost:8000/dashboard/signout' + '?token=' + token.value
     const response = await axios.post(query);
     // const response = await axios.post('http://localhost:8000/dashboard/signout');
     // console.log('sign out response =' , response.data.message)
@@ -414,7 +430,7 @@ const signOut = async () => {
 <!-- **************   HEADER    ******************* -->
 <nav class="bg-gradient-to-r from-sky-600 to-sky-400 px-10 py-3 text-white overflow-auto">  
   <div class="text-center lg:flex lg:float-left text-xl">
-    <div class="inline-block px-4 border-r-2">{{ state.companyName }}</div>
+    <div class="inline-block px-4 border-r-2">{{ companyName }}</div>
     <div class="inline-block px-4 border-r-2">Dashboard</div>
     <div class="inline-block px-4">Витрина таможенного склада</div>
   </div>
