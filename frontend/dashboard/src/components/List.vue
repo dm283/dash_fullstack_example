@@ -454,9 +454,18 @@ const exportFile = (dataSet, fileName, fileType) => {
   //
   if (!dataSet) return;
 
-  console.log('export data =', dataSet)
+  // leave in dataset only columns from listTableColumns and rename cols in rus
+  let dataForExport = []
+  for (let rec of dataSet) {
+    let modifiedRec = {}
+    for (let field of Object.keys(props.listTableColumns)) {
+      modifiedRec[props.listTableColumns[field]] = rec[field]
+    }
+    dataForExport.push(modifiedRec)
+  }
 
-  const ws = utils.json_to_sheet(dataSet);
+  //const ws = utils.json_to_sheet(dataSet);
+  const ws = utils.json_to_sheet(dataForExport);
   const wb = utils.book_new();
   utils.book_append_sheet(wb, ws, "dashboard_data");
 
