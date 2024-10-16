@@ -201,7 +201,7 @@ const clickSortField2 = (field) => {
   else {
     sortingDataType.value = 'string';
   }
-  console.log('!!! ', props.data[0][field], sortingDataType.value)
+  // console.log('!!! ', props.data[0][field], sortingDataType.value)
   sortTable();
 }
 
@@ -318,7 +318,7 @@ const setFilter = (field) => {
 
   // searchFieldsList.push(searchBy.value);
   // console.log('props.data[0] = ', props.data[0])
-  console.log('field = ', field)
+  // console.log('field = ', field)
 
   const fieldsfiltersDict = {};
   for (let field of Object.keys(props.listTableColumns)) {
@@ -330,7 +330,7 @@ const setFilter = (field) => {
     }
   }
 
-  console.log('fieldsfiltersDict =', fieldsfiltersDict)
+  // console.log('fieldsfiltersDict =', fieldsfiltersDict)
 
   if (Object.keys(fieldsfiltersDict).length == 0) {
     loadLocalData();
@@ -371,7 +371,7 @@ const setFilter = (field) => {
 
     };
 
-    console.log('newLocalData.length =', newLocalData.length)
+    // console.log('newLocalData.length =', newLocalData.length)
 
     state.dataForFiltering = newLocalData;
 

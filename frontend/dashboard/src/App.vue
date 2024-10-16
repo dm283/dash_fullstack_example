@@ -20,8 +20,8 @@ parser.parse(data);
 var backendIpAddress = parser.get("main", "backend_ip_address");
 var backendPort = parser.get("main", "backend_port");
 var companyName = parser.get("content", "company_name");
-console.log('backendIpAddress =', backendIpAddress)
-console.log('backendPort =', backendPort)
+// console.log('backendIpAddress =', backendIpAddress)
+// console.log('backendPort =', backendPort)
 
 
 const state = reactive({
@@ -60,7 +60,7 @@ async function getData() {
 
       let query = `http://${backendIpAddress}:${backendPort}/dashboard/` + '?token=' + token.value + filterSubstring.value
       //let query = 'http://localhost:8000/dashboard/' + '?token=' + token.value + filterSubstring.value
-      console.log('query =', query)
+      // console.log('query =', query)
       const response = await axios.get(query);
       
       // console.log('API RESPONSE =', response.status)
@@ -113,7 +113,7 @@ async function updateData() {
 
 const handleSubmit = async () => {
   //
-  console.log('handle submit!') 
+  // console.log('handle submit!') 
   const filters = {
     'filterAccountBookDateDocFrom': filterAccountBookDateDocFrom, 
     'filterAccountBookDateDocTo': filterAccountBookDateDocTo, 

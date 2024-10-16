@@ -270,7 +270,7 @@ def select_dashboard_data(selects_keys_list=select, filters:Union[dict, None]=No
     #         }
     #         for data in db.cursor.fetchall()
     #     ]
-    print('filters = ', filters)
+    # print('filters = ', filters)
 
     objects = {}
     for s in selects_keys_list:
