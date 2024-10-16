@@ -6,6 +6,7 @@ import TabReportVehicle from '@/components/TabReportVehicle.vue';
 
   
 const props = defineProps({
+  tabNumberVar: 1,
   storageStateBarTnvedQuantityDatax: Array,
   storageStateBarTnvedQuantityDatay: Array,
   storageStateCardProductQuantity: 0,
@@ -28,10 +29,13 @@ const props = defineProps({
 
 });
 
-const openTab = ref(1);
+const emit = defineEmits(['changeTab']) // emit
+
+const openTab = ref(props.tabNumberVar);
 
 const toggleTabs = (tabNumber) => {
   openTab.value = tabNumber;
+  emit('changeTab', tabNumber) // emit
 };
 
 </script>
