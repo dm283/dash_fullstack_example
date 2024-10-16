@@ -251,7 +251,11 @@ const signOut = async () => {
   }
 };
 
-
+const tabNumberVar = ref(1);  // initial tab number
+const changeTabValue = (n) => {
+  // rememberance of tab number from Dashboard component
+  tabNumberVar.value = n;
+};
 
 
 </script>
@@ -457,6 +461,9 @@ const signOut = async () => {
 
 
   <Dashboard 
+    @change-tab="changeTabValue"
+    :tabNumberVar = "tabNumberVar"
+
     :storageStateBarTnvedQuantityDatax = "state.storageState.barTnvedQuantity.datax" 
     :storageStateBarTnvedQuantityDatay="state.storageState.barTnvedQuantity.datay" 
     :storageStateCardProductQuantity="state.storageState.cardProductQuantity" 
