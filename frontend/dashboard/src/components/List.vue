@@ -12,21 +12,13 @@ const props = defineProps({
   listTableColumns: Object,
 });
 
-
-// const locatDataKeys = computed(() => {
-//   return props.data;
-// })
-
-// console.log('check list name =', props.name)
-// console.log('check list data =', props.data)
-
 const state = reactive({
   // data: [],
   tableFields: [],
   localData: [],
   dataForRender: [],
   currentPage: 1,
-  limitRecords: 13,
+  limitRecords: 14,
   initRender: true,
 })
 
@@ -401,8 +393,9 @@ const checkState = () => {
 const computeRenderData = (action) => {
   //
   if (action == 'right') {
-    if (state.currentPage < (Math.floor(dataLengthRender() / state.limitRecords) + 1)) {
-      state.currentPage++;
+    if (state.currentPage < Math.ceil(dataLengthRender() / state.limitRecords)) {
+    // if (state.currentPage < (Math.floor(dataLengthRender() / state.limitRecords) + 1)) {
+        state.currentPage++;
     }
   }
   else if (action == 'left') {
@@ -414,7 +407,8 @@ const computeRenderData = (action) => {
     state.currentPage = 1;
   }
   else if (action == 'last') {
-    state.currentPage = Math.floor(dataLengthRender() / state.limitRecords) + 1;
+    state.currentPage = Math.ceil(dataLengthRender() / state.limitRecords);
+    // state.currentPage = Math.floor(dataLengthRender() / state.limitRecords) + 1;
   }
   
 }
@@ -529,14 +523,35 @@ const exportFile = (dataSet, fileName, fileType) => {
 <!-- {{ props.listTableColumns }} -->
 
 <!-- *******************************  NAV AREA  ************************* --> 
-<nav class="text-sm font-semibold space-y-0 border-dashed border-green-500">
-
-  <div class="inline-block mr-5">
+<nav class="overflow-auto">
+  <div class="text-sm font-semibold inline-block">
     <div class="text-xl font-normal">{{ props.name }}</div>
   </div>
 
+  <div class="float-right">
+  <!-- ***************   PAGINATION BLOCK   ********************* -->
+  <div id="paginationBlock" class="inline-block mr-3">
+  <div class="space-x-1.5">
+    <div class="paginationBtn" @click="computeRenderData('first')">
+      <i class="pi pi-angle-double-left" style="font-size: 1rem"></i>
+    </div>
+    <div class="paginationBtn" @click="computeRenderData('left')">
+      <i class="pi pi-angle-left" style="font-size: 1rem"></i>
+    </div>
+    {{ state.limitRecords*(state.currentPage-1)+1 }}-{{ 
+      (state.limitRecords*state.currentPage < dataLengthRender()) 
+      ? state.limitRecords*state.currentPage : dataLengthRender() }} of {{ dataLengthRender() }}
+    <div class="paginationBtn" @click="computeRenderData('right')">
+      <i class="pi pi-angle-right" style="font-size: 1rem"></i>
+    </div>
+    <div class="paginationBtn" @click="computeRenderData('last')">
+      <i class="pi pi-angle-double-right" style="font-size: 1rem"></i>
+    </div>
+  </div>
+  </div>
+
   <!-- DOWNLOAD BUTTON DROPDOWN -->
-  <div class="float-right mr-1">
+  <div class="inline-block mr-1">
     <button class="w-8 h-8 rounded-lg bg-green-400 text-white hover:opacity-75" 
       @click="toggleDropdown('download')">
       <i class="pi pi-download" style="font-size: 1rem"></i>
@@ -549,6 +564,8 @@ const exportFile = (dataSet, fileName, fileType) => {
       </ul>
     </div>
   </div>
+
+</div>
 
 <!-- search area ************************* --> 
 <!-- <div class="inline-block">
@@ -686,7 +703,7 @@ const exportFile = (dataSet, fileName, fileType) => {
 </section>
 
 <!-- ***************   PAGINATION BLOCK   ********************* -->
-<div id="paginationBlock" class="absolute bottom-2 right-3 overflow-auto pt-3 pb-2">
+<!-- <div id="paginationBlock" class="absolute bottom-2 right-3 overflow-auto pt-3 pb-2">
 <div class="float-right space-x-1.5">
   <div class="paginationBtn" @click="computeRenderData('first')">
     <i class="pi pi-angle-double-left" style="font-size: 1rem"></i>
@@ -704,7 +721,7 @@ const exportFile = (dataSet, fileName, fileType) => {
     <i class="pi pi-angle-double-right" style="font-size: 1rem"></i>
   </div>
 </div>
-</div>
+</div> -->
 
 </div>
 </div>
